@@ -1,0 +1,19 @@
+services:
+  web:
+    image: node:24-alpine
+    container_name: oma-portfolio
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      # We use a NAMED volume here (see the bottom of the file)
+      - node_modules_data:/app/node_modules
+      - /app/.next
+    working_dir: /app
+    # We chain the commands: Install first, THEN start.
+    # This ensures your libraries are always there.
+    command: npm run dev -- -H 0.0.0.0
+
+# This section tells Docker to create a permanent storage box
+volumes:
+  node_modules_data:
