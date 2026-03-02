@@ -1,5 +1,5 @@
 "use client";
-import { Inter, Space_Grotesk, Playfair_Display, JetBrains_Mono} from "next/font/google";
+import { Inter, Space_Grotesk, Playfair_Display, JetBrains_Mono, Roboto, Montserrat} from "next/font/google";
 import { useParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import { projects } from "@/data/projects"; // Make sure path is correct
@@ -36,11 +36,25 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "700"],
 });
 
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
+
+
 const fontMap = {
   inter: inter.className,
   space: spaceGrotesk.className,
   playfair: playfair.className,
   jetbrains: jetbrainsMono.className,
+  roboto: roboto.className,
+  montserrat: montserrat.className,
 };
 
 export default function ProjectPage() {

@@ -5,6 +5,22 @@ import Link from "next/link"; // Improved: Use Next.js Link for internal navigat
 
 const projects = [
   {
+    title: "Modular LMS Backend System",
+    problem:
+      "Educational platforms require strict role-based access control, dynamic enrollment handling, timed course access, and secure content delivery tied to payment status.",
+    architecture:
+      "Built a layered backend system connecting Course → Package → Payment → Enrollment → Content access. Implemented a content state engine (LOCKED/AVAILABLE/COMPLETED), quiz submission workflow with answer tracking, resource analytics logging (views/downloads), JWT-based authentication, and role-restricted admin/student endpoints.",
+    keyFocus: "Access Control, Enrollment Logic & Learning Progress Tracking",
+    stack: ["Python", "Django", "Django REST Framework", "SimpleJWT", "Celery", "Channels"],
+    github: "Private Repository",
+    slug: "lms-platform",
+    theme: {
+      primary: "text-blue-400",
+      background: "bg-slate-950",
+      accent: "hover:text-blue-300",
+    },
+  },
+  {
     title: "Hospital Management System",
     problem:
       "Healthcare workflows were fragmented, requiring structured role-based access and appointment tracking.",
@@ -35,6 +51,17 @@ const projects = [
       background: "bg-black",
       accent: "hover:text-rose-300",
     },
+  },
+  {
+    title: "QuestNest Infrastructure Engine",
+    problem:
+      "Operational platforms often lack organisation-scoped identity control, lifecycle enforcement, and traceable automation across assets and payments.",
+    architecture:
+      "Designed an infrastructure-first Django system centered on organisation ownership, lifecycle state validation, and event-driven automation with task generation.",
+    keyFocus: "Operational Infrastructure & Automation",
+    stack: ["Python", "Django", "PostgreSQL", "Event-Driven Architecture"],
+    github: "https://github.com/Oma05-01",
+    slug: "questnest",
   },
   {
     title: "DRID Student Platform Contribution",

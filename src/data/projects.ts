@@ -1,5 +1,5 @@
-import { LucideIcon } from "lucide-react";
-import { Hospital, ShoppingBag, School } from "lucide-react";
+import { BookOpen, LucideIcon } from "lucide-react";
+import { Hospital, ShoppingBag, School, Building2 } from "lucide-react";
 export interface Project {
   title: string;
   slug: string;
@@ -15,11 +15,30 @@ export interface Project {
     primary: string;     // main accent color
     background: string;  // page background
     accent: string;  
-    font: "inter" | "space" | "playfair" | "jetbrains";   // hover/glow color
+    font: "inter" | "space" | "playfair" | "jetbrains" | "roboto" | "montserrat";   // hover/glow color
   };
 }
 
 export const projects: Record<string, Project> = {
+  "lms-platform": {
+  title: "Modular LMS & Enrollment Engine",
+  slug: "lms-platform",
+  summary: "A role-based learning management system with dynamic enrollment, payments, and content access control.",
+  problem:
+    "Learning platforms often struggle with enforcing structured access control across courses, packages, payments, and timed enrollments.",
+  architecture:
+    "Designed a modular backend architecture linking courses, packages, payments, enrollments, and content state logic. Implemented access control layers, quiz submission workflows, resource analytics, and real-time student progress tracking.",
+  keyFocus: "Enrollment Lifecycle & Access State Engine",
+  stack: ["Python", "Django", "Django REST Framework", "JWT", "Celery", "Channels"],
+  github: "Private Repository",
+  icon: BookOpen,
+  theme: {
+    primary: "text-indigo-400",
+    background: "bg-slate-900",
+    accent: "hover:text-indigo-300",
+    font: "montserrat"
+  },
+},
  "hospital-system": {
   title: "Hospital Management System",
   slug: "hospital-system",
@@ -74,6 +93,23 @@ export const projects: Record<string, Project> = {
       font: "jetbrains"
     },
   },
+  "questnest": {
+  title: "QuestNest Infrastructure Engine",
+  slug: "questnest",
+  summary: "Organisation-centric operational infrastructure powering rentals, payments, escrow automation, and audit traceability.",
+  problem: "Traditional property platforms lack identity-first infrastructure, lifecycle enforcement, and operational traceability across payments, assets, and roles.",
+  architecture: "Infrastructure-first Django system built around organisation scoping, lifecycle engines, rule-driven automation, and event-based audit logging.",
+  keyFocus: "Operational automation, lifecycle validation, event-driven task creation, and multi-organisation asset management.",
+  stack: ["Django", "PostgreSQL", "Event-Driven Architecture", "Role-Based Access Control"],
+  github: "https://github.com/Oma05-01",
+  icon: Building2, // or Home / Layers depending on your icon library
+  theme: {
+    primary: "text-stone-400",
+    background: "bg-slate-950",
+    accent: "hover:text-stone-300",
+    font: "roboto"
+  },
+},
 };
 
 
