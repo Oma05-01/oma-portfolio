@@ -1,10 +1,11 @@
 "use client";
+import { useState } from "react";
 import { Inter, Space_Grotesk, Playfair_Display, JetBrains_Mono, Roboto, Montserrat} from "next/font/google";
 import { useParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import { projects } from "@/data/projects"; // Make sure path is correct
-import { motion, Variants } from "framer-motion";
-import { ArrowUpRight, Github, Layers, Target, AlertCircle, ArrowRight } from "lucide-react";
+import { AnimatePresence, motion, Variants } from "framer-motion";
+import { ArrowUpRight, Github, Layers, Target, AlertCircle, ArrowRight, Terminal, X } from "lucide-react";
 
 const fadeIn: Variants= {
   hidden: { opacity: 0, y: 20 },
@@ -61,6 +62,8 @@ export default function ProjectPage() {
   const params = useParams();
   const slug = params.slug as string;
 
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   // ✅ CORRECT LOOKUP for Record<string, Project>
   // Since projects is an object, we access it directly by key
   const project = projects[slug];
@@ -204,6 +207,47 @@ export default function ProjectPage() {
               {project.keyFocus}
             </p>
           </motion.section>
+
+          {project.screenshots && project.screenshots.length > 0 && (
+            <motion.section
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              custom={0.4}
+              variants={fadeIn}
+              className="group"
+            >
+              <div className={`mb-4 flex items-center gap-3 ${project.theme.primary}`}>
+                <Terminal size={24} />
+                <h2 className="text-sm font-bold uppercase tracking-widest opacity-80">Implementation</h2>
+              </div>
+              <h3 className="mb-6 text-3xl font-semibold text-white">Code & API Testing</h3>
+              
+              <div className="space-y-8">
+                {project.screenshots.map((snap: any, idx: number) => (
+                  <div key={idx} className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-colors hover:border-white/20">
+                    {/* Image Area */}
+                    <div className="relative w-full overflow-hidden border-b border-white/10 bg-black/50">
+                      <img 
+                        src={snap.image} 
+                        alt={snap.title}
+                        // 👇 Added cursor-pointer, a hover zoom effect, and the onClick handler
+                        className="w-full cursor-pointer object-contain transition-transform duration-300 hover:scale-[1.02]"
+                        onClick={() => setSelectedImage(snap.image)} 
+                      />
+                    </div>
+                    {/* Descriptive Text Area */}
+                    <div className="p-6">
+                      <h4 className="mb-2 text-lg font-semibold text-white">{snap.title}</h4>
+                      <p className="text-sm leading-relaxed text-slate-400">
+                        {snap.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.section>
+          )}
         </div>
 
         {/* 7. SIDEBAR: Changed aside -> motion.aside */}
@@ -255,6 +299,39 @@ export default function ProjectPage() {
           </div>
         </motion.aside>
       </div>
+
+      {/* 8. IMAGE MODAL */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)} // Clicking the background closes it
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute right-6 top-6 z-50 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 md:right-10 md:top-10"
+            >
+              <X size={24} />
+            </button>
+
+            {/* The Enlarged Image */}
+            <motion.img
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
+              src={selectedImage}
+              alt="Enlarged view"
+              className="max-h-[90vh] max-w-full rounded-lg object-contain shadow-2xl"
+              onClick={(e) => e.stopPropagation()} // Prevents clicking the actual image from closing the modal
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </main>
   );
 }

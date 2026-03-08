@@ -12,7 +12,7 @@ const projects = [
       "Built a layered backend system connecting Course → Package → Payment → Enrollment → Content access. Implemented a content state engine (LOCKED/AVAILABLE/COMPLETED), quiz submission workflow with answer tracking, resource analytics logging (views/downloads), JWT-based authentication, and role-restricted admin/student endpoints.",
     keyFocus: "Access Control, Enrollment Logic & Learning Progress Tracking",
     stack: ["Python", "Django", "Django REST Framework", "SimpleJWT", "Celery", "Channels"],
-    github: "Private Repository",
+    github: "https://github.com/drid-uniben/django-backend",
     slug: "lms-platform",
     theme: {
       primary: "text-blue-400",
@@ -28,7 +28,7 @@ const projects = [
       "Designed a modular Django backend with role-based authentication and REST API endpoints for Flutter integration.",
     keyFocus: "Role-Based Access Control & API Architecture",
     stack: ["Python", "Django", "REST API", "PostgreSQL"],
-    github: "https://github.com/Oma05-01",
+    github: "https://github.com/Oma05-01/hospital",
     slug: "hospital-system",
     theme: {
       primary: "text-blue-400",
@@ -44,7 +44,7 @@ const projects = [
       "Built structured Django models and implemented authentication flows with clean separation of concerns.",
     keyFocus: "E-commerce Logic & Authentication Flows",
     stack: ["Python", "Django", "HTML", "CSS"],
-    github: "https://github.com/Oma05-01",
+    github: "https://github.com/Oma05-01/Odyce",
     slug: "odyce-store",
     theme: {
       primary: "text-rose-400",
@@ -60,7 +60,7 @@ const projects = [
       "Designed an infrastructure-first Django system centered on organisation ownership, lifecycle state validation, and event-driven automation with task generation.",
     keyFocus: "Operational Infrastructure & Automation",
     stack: ["Python", "Django", "PostgreSQL", "Event-Driven Architecture"],
-    github: "https://github.com/Oma05-01",
+    github: "https://github.com/Oma05-01/QuestNest",
     slug: "questnest",
   },
   {
@@ -137,7 +137,7 @@ export default function Projects() {
                  {/* Option 1: Link to detailed Case Study page */}
                 <Link
                   href={`/projects/${project.slug}`}
-                  className="text-sm font-medium text-indigo-400 underline hover:text-indigo-300"
+                  className="inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 px-5 py-2.5 text-sm font-medium text-indigo-400 transition-all hover:bg-indigo-500/10 hover:text-indigo-300"
                 >
                   Read Case Study →
                 </Link>

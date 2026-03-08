@@ -17,6 +17,11 @@ export interface Project {
     accent: string;  
     font: "inter" | "space" | "playfair" | "jetbrains" | "roboto" | "montserrat";   // hover/glow color
   };
+  screenshots?: {
+    title: string;
+    description: string;
+    image: string; // The path to the image in your public folder
+  }[];
 }
 
 export const projects: Record<string, Project> = {
@@ -30,7 +35,7 @@ export const projects: Record<string, Project> = {
     "Designed a modular backend architecture linking courses, packages, payments, enrollments, and content state logic. Implemented access control layers, quiz submission workflows, resource analytics, and real-time student progress tracking.",
   keyFocus: "Enrollment Lifecycle & Access State Engine",
   stack: ["Python", "Django", "Django REST Framework", "JWT", "Celery", "Channels"],
-  github: "Private Repository",
+  github: "https://github.com/drid-uniben/django-backend",
   icon: BookOpen,
   theme: {
     primary: "text-indigo-400",
@@ -47,7 +52,7 @@ export const projects: Record<string, Project> = {
   architecture: "Modular Django backend with DRF endpoints and relational data modeling.",
   keyFocus: "Scalability, structured logic, and clean API separation.",
   stack: ["Django", "Django REST Framework", "PostgreSQL"],
-  github: "https://github.com/Oma05-01",
+  github: "https://github.com/Oma05-01/hospital",
   icon: Hospital,
   theme: {
     primary: "text-purple-400",
@@ -55,6 +60,18 @@ export const projects: Record<string, Project> = {
     accent: "hover:text-purple-300",
     font: "space"
   },
+  screenshots: [
+    {
+      title: "Authentication API via Postman",
+      description: "Testing the JWT token generation and role-based access validation for doctors and admins.",
+      image: "/postman-test.png" // Place an image named this in your 'public' folder
+    },
+    {
+      title: "Django Models Setup",
+      description: "Snippet showing the structured relational database models for patients and appointments.",
+      image: "/code-snippet.png"
+    }
+  ],
 },
   "odyce-store": {
     title: "Odyce Perfume Store",
@@ -65,7 +82,7 @@ export const projects: Record<string, Project> = {
     architecture:"Structured Django models with authentication and order management logic.",
     keyFocus: "E-commerce logic and authentication flows.",
     stack: ["Django", "Python", "HTML", "CSS"],
-      github: "https://github.com/Oma05-01",
+      github: "https://github.com/Oma05-01/Odyce",
       icon: ShoppingBag,
     theme: {
       primary: "text-blue-400",
@@ -101,7 +118,7 @@ export const projects: Record<string, Project> = {
   architecture: "Infrastructure-first Django system built around organisation scoping, lifecycle engines, rule-driven automation, and event-based audit logging.",
   keyFocus: "Operational automation, lifecycle validation, event-driven task creation, and multi-organisation asset management.",
   stack: ["Django", "PostgreSQL", "Event-Driven Architecture", "Role-Based Access Control"],
-  github: "https://github.com/Oma05-01",
+  github: "https://github.com/Oma05-01/QuestNest",
   icon: Building2, // or Home / Layers depending on your icon library
   theme: {
     primary: "text-stone-400",
