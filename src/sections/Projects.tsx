@@ -4,6 +4,23 @@ import { motion } from "framer-motion";
 import Link from "next/link"; // Improved: Use Next.js Link for internal navigation
 
 const projects = [
+{
+  title: "Tax Estimation Engine (2026 Act)",
+  slug: "tax-estimator",
+  summary: "Client-side, WASM-powered tax calculation engine featuring dynamic user profiling, proportional tax distribution, and automated receipt generation.",
+  problem: "Nigerian tax estimation involves complex progressive brackets, profile-specific statutory reliefs, and severe privacy risks when uploading sensitive bank statements to external servers.",
+  architecture: "Privacy-first architecture leveraging WebAssembly (Pyodide) for zero-server data parsing, paired with a React state engine that dynamically adapts progressive tax models based on user profiles.",
+  keyFocus: "Secure client-side data processing, proportional tax distribution algorithms, state-locked interactive workflows, and dynamic statutory relief calculation.",
+  stack: ["React", "TypeScript", "WebAssembly (Pyodide)", "Tailwind CSS"],
+  github: "https://github.com/Oma05-01/TaxEstimator", // Update repo name if different!
+  liveUrl: "https://tax-esteem.vercel.app/",
+  theme: {
+    primary: "text-blue-500",
+    background: "bg-slate-900",
+    accent: "hover:text-blue-400",
+    font: "inter" // Replace with the font used in your portfolio
+  },
+},
   {
     title: "Modular LMS Backend System",
     problem:
@@ -14,6 +31,7 @@ const projects = [
     stack: ["Python", "Django", "Django REST Framework", "SimpleJWT", "Celery", "Channels"],
     github: "https://github.com/drid-uniben/django-backend",
     slug: "lms-platform",
+    hasApi: false, // Added this flag to indicate API documentation availability
     theme: {
       primary: "text-blue-400",
       background: "bg-slate-950",
@@ -30,6 +48,7 @@ const projects = [
     stack: ["Python", "Django", "REST API", "PostgreSQL"],
     github: "https://github.com/Oma05-01/hospital",
     slug: "hospital-system",
+    hasApi: true,
     theme: {
       primary: "text-blue-400",
       background: "bg-slate-950",
@@ -46,6 +65,7 @@ const projects = [
     stack: ["Python", "Django", "HTML", "CSS"],
     github: "https://github.com/Oma05-01/Odyce",
     slug: "odyce-store",
+    hasApi: false,
     theme: {
       primary: "text-rose-400",
       background: "bg-black",
@@ -62,6 +82,7 @@ const projects = [
     stack: ["Python", "Django", "PostgreSQL", "Event-Driven Architecture"],
     github: "https://github.com/Oma05-01/QuestNest",
     slug: "questnest",
+    hasApi: false,
   },
   {
     title: "DRID Student Platform Contribution",
@@ -73,7 +94,8 @@ const projects = [
     stack: ["Python", "Django"],
     github: "https://drid.uniben.edu/",
     slug: "drid-platform", // Added a slug here to prevent errors
-  },
+    hasApi: false,
+  }
 ];
 
 export default function Projects() {
@@ -152,6 +174,28 @@ export default function Projects() {
                   >
                     View Code ↗
                   </a>
+                )}
+
+                {/* 👇 NEW: Live Demo Link */}
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-emerald-400/80 transition-colors hover:text-emerald-300"
+                  >
+                    Live Demo ↗
+                  </a>
+                )}
+
+                {/* Option 3: Link to API Documentation (Now generic for any project) */}
+                {project.hasApi && (
+                  <Link
+                    href={`/api-docs/${project.slug}`}
+                    className="text-sm font-medium text-indigo-400/80 transition-colors hover:text-indigo-300"
+                  >
+                    API Docs ↗
+                  </Link>
                 )}
               </div>
             </motion.div>

@@ -224,28 +224,50 @@ export default function ProjectPage() {
               <h3 className="mb-6 text-3xl font-semibold text-white">Code & API Testing</h3>
               
               <div className="space-y-8">
-                {project.screenshots.map((snap: any, idx: number) => (
-                  <div key={idx} className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-colors hover:border-white/20">
-                    {/* Image Area */}
-                    <div className="relative w-full overflow-hidden border-b border-white/10 bg-black/50">
+              {project.screenshots.map((snap: any, idx: number) => (
+                <div key={idx} className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-colors hover:border-white/20">
+                  
+                  {/* 👇 Media Area (Now handles both Images and PDFs) */}
+                  <div className="relative w-full overflow-hidden border-b border-white/10 bg-black/50 flex items-center justify-center min-h-[250px]">
+                    {snap.isPdf ? (
+                      // --- RENDER THIS IF IT IS A PDF ---
+                      <div className="flex flex-col items-center justify-center p-12 text-center">
+                        <div className="mb-4 rounded-full bg-white/10 p-4">
+                          {/* Simple Document Icon */}
+                          <svg className="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                        <a 
+                          href={snap.image} // Still uses snap.image as the file path
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-lg bg-indigo-500/20 px-6 py-3 text-sm font-medium text-indigo-300 transition-all hover:bg-indigo-500/40"
+                        >
+                          Open Full PDF Document ↗
+                        </a>
+                      </div>
+                    ) : (
+                      // --- RENDER THIS IF IT IS AN IMAGE (Your exact original code) ---
                       <img 
                         src={snap.image} 
                         alt={snap.title}
-                        // 👇 Added cursor-pointer, a hover zoom effect, and the onClick handler
                         className="w-full cursor-pointer object-contain transition-transform duration-300 hover:scale-[1.02]"
                         onClick={() => setSelectedImage(snap.image)} 
                       />
-                    </div>
-                    {/* Descriptive Text Area */}
-                    <div className="p-6">
-                      <h4 className="mb-2 text-lg font-semibold text-white">{snap.title}</h4>
-                      <p className="text-sm leading-relaxed text-slate-400">
-                        {snap.description}
-                      </p>
-                    </div>
+                    )}
                   </div>
-                ))}
-              </div>
+
+                  {/* Descriptive Text Area */}
+                  <div className="p-6">
+                    <h4 className="mb-2 text-lg font-semibold text-white">{snap.title}</h4>
+                    <p className="text-sm leading-relaxed text-slate-400">
+                      {snap.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
             </motion.section>
           )}
         </div>

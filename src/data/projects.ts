@@ -1,14 +1,17 @@
 import { BookOpen, LucideIcon } from "lucide-react";
-import { Hospital, ShoppingBag, School, Building2 } from "lucide-react";
+import { Hospital, ShoppingBag, School, Building2, Calculator } from "lucide-react";
+import { Ledger } from "next/font/google";
 export interface Project {
   title: string;
   slug: string;
+  hasApi?: boolean;
   summary?: string;
   problem: string;
   architecture?: string;
   keyFocus?: string;
   stack?: string[];
-  github: string;
+  github?: string;
+  liveUrl?: string;
   icon: LucideIcon;
   // 👇 Theme configuration
   theme: {
@@ -20,7 +23,8 @@ export interface Project {
   screenshots?: {
     title: string;
     description: string;
-    image: string; // The path to the image in your public folder
+    image: string;
+    isPdf?: boolean;
   }[];
 }
 
@@ -62,15 +66,22 @@ export const projects: Record<string, Project> = {
   },
   screenshots: [
     {
+      title: "Database Architecture",
+      description: "Snippet showing the structured relational database models for patients and appointments.",
+      image: "/docs/hospital-database-schema.pdf", // Path to your PDF in public/docs
+      isPdf: true, 
+    },
+    {
+      title: "High-Level System Architecture",
+      description: "Architecture diagram illustrating the Flutter mobile client integration, synchronous RBAC API flow, and asynchronous background task delegation.",
+      image: "/hospital-arch.png",// Save your Eraser export as this
+      isPdf: false,
+    },
+    {
       title: "Authentication API via Postman",
       description: "Testing the JWT token generation and role-based access validation for doctors and admins.",
       image: "/postman-test.png" // Place an image named this in your 'public' folder
     },
-    {
-      title: "Django Models Setup",
-      description: "Snippet showing the structured relational database models for patients and appointments.",
-      image: "/code-snippet.png"
-    }
   ],
 },
   "odyce-store": {
@@ -127,6 +138,49 @@ export const projects: Record<string, Project> = {
     font: "roboto"
   },
 },
+"tax-estimator" :{
+  title: "Tax Estimation Engine",
+  slug: "tax-estimator",
+  hasApi: false, // Pure client-side WASM magic!
+  problem: "Users needed a secure way to calculate complex multi-profile tax liabilities (Salaried, Freelancer, Hybrid) and process sensitive bank statements without the privacy risks of server-side data retention.",
+  architecture: "Leveraged Pyodide (WebAssembly) to execute Python data processing entirely within the browser. Engineered context-aware React UI flows and a proportional tax distribution algorithm to accurately handle progressive fiscal brackets.",
+  keyFocus: "WebAssembly (WASM) Integration & Secure Client-Side Processing",
+  stack: ["React", "TypeScript", "Tailwind CSS", "WebAssembly", "Pyodide"],
+  icon: Calculator,
+  github: "https://github.com/Oma05-01/Tax_Esteem", // Uncomment if you want to show the code too
+  theme: {
+    primary: "text-blue-500",
+    background: "bg-slate-900",
+    accent: "hover:text-blue-400",
+    font: "inter" // Replace with the font used in your portfolio
+  },
+  screenshots: [
+    {
+      title: "Tax Calculation Dashboard",
+      description: "Interactive dashboard featuring granular transaction filtering, state-locked progress steppers, and dynamic taxability toggles.",
+      image: "/images/tax-dashboard.png", // 👈 Make sure to take a screenshot and place it in public/images!
+      isPdf: false,
+    },
+    {
+      title: "PDF Report Generation",
+      description: "Automated reporting system that transforms progressive bracket data into a downloadable, print-ready receipt format.",
+      image: "/images/tax-report.png",
+      isPdf: false,
+    },
+    {
+      title: "Tax Breakdown Visualization",
+      description: "Dynamic visual breakdown of tax liabilities across different profiles and brackets, showcasing the proportional distribution algorithm in action.",
+      image: "/images/tax_es_breakd.png",
+      isPdf: false,
+    },
+    {
+      title: "Summary Report Generation",
+      description: "Comprehensive summary report that aggregates tax liabilities, reliefs, and final payable amounts into a single section for user reference.",
+      image: "/images/break_d.png",
+      isPdf: false,
+    }
+  ]
+  },
 };
 
 

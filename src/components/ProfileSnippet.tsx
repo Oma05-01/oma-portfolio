@@ -9,7 +9,7 @@ export default function ProfileSnippet() {
         {/* Larger Image Section */}
         <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-2xl border border-white/10 md:h-40 md:w-40">
           <Image
-            src="/oma-profile.jpg" // Make sure this image is in your public folder
+            src="/profilep_30.jpeg" // Make sure this image is in your public folder
             alt="Esigbone Oma"
             fill
             className="object-cover"
