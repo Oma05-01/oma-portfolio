@@ -147,18 +147,18 @@ export const projects: Record<string, Project> = {
   keyFocus: "WebAssembly (WASM) Integration & Secure Client-Side Processing",
   stack: ["React", "TypeScript", "Tailwind CSS", "WebAssembly", "Pyodide"],
   icon: Calculator,
-  github: "https://github.com/Oma05-01/Tax_Esteem", // Uncomment if you want to show the code too
+  github: "https://github.com/Oma05-01/Tax_Esteem",
   theme: {
     primary: "text-blue-500",
     background: "bg-slate-900",
     accent: "hover:text-blue-400",
-    font: "inter" // Replace with the font used in your portfolio
+    font: "inter"
   },
   screenshots: [
     {
       title: "Tax Calculation Dashboard",
       description: "Interactive dashboard featuring granular transaction filtering, state-locked progress steppers, and dynamic taxability toggles.",
-      image: "/images/tax-dashboard.png", // 👈 Make sure to take a screenshot and place it in public/images!
+      image: "/images/tax-dashboard.png",
       isPdf: false,
     },
     {

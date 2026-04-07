@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { li } from "framer-motion/client";
 import Link from "next/link"; // Improved: Use Next.js Link for internal navigation
 
 const projects = [
@@ -49,6 +50,7 @@ const projects = [
     github: "https://github.com/Oma05-01/hospital",
     slug: "hospital-system",
     hasApi: true,
+    liveUrl: "https://hospital-or65.onrender.com",
     theme: {
       primary: "text-blue-400",
       background: "bg-slate-950",
