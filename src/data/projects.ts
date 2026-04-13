@@ -101,6 +101,25 @@ export const projects: Record<string, Project> = {
       accent: "hover:text-blue-300",
       font: "playfair"
     },
+    screenshots: [
+    {
+      title: "Database Architecture",
+      description: "Snippet showing the structured relational database models for patients and appointments.",
+      image: "/docs/hospital-database-schema.pdf", // Path to your PDF in public/docs
+      isPdf: false, 
+    },
+    {
+      title: "High-Level System Architecture",
+      description: "Architecture diagram illustrating the Flutter mobile client integration, synchronous RBAC API flow, and asynchronous background task delegation.",
+      image: "/hospital-arch.png",// Save your Eraser export as this
+      isPdf: false,
+    },
+    {
+      title: "Authentication API via Postman",
+      description: "Testing the JWT token generation and role-based access validation for doctors and admins.",
+      image: "/postman-test.png" // Place an image named this in your 'public' folder
+    },
+  ],
   },
   "drid-platform": {
     title: "DRID Student Platform",
