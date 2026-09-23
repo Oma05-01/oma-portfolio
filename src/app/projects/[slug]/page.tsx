@@ -1,294 +1,440 @@
 "use client";
+
 import { useState } from "react";
-import { Inter, Space_Grotesk, Playfair_Display, JetBrains_Mono, Roboto, Montserrat} from "next/font/google";
-import { useParams } from "next/navigation";
-import { notFound } from "next/navigation";
-import { projects } from "@/data/projects"; // Make sure path is correct
-import { AnimatePresence, motion, Variants } from "framer-motion";
-import { ArrowUpRight, Github, Layers, Target, AlertCircle, ArrowRight, Terminal, X } from "lucide-react";
+import { useParams, notFound } from "next/navigation";
+import { projects } from "@/data/projects";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 
-const fadeIn: Variants= {
-  hidden: { opacity: 0, y: 20 },
-  visible: (delay: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay,
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  }),
-};
-
-const inter = Inter({ subsets: ["latin"] });
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
+const fade = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { delay, duration: 0.6, ease: [0.4, 0, 0.2, 1] as const },
 });
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
+const fadeInView = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { delay, duration: 0.6, ease: [0.4, 0, 0.2, 1] as const },
 });
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-});
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-});
-
-
-
-const fontMap = {
-  inter: inter.className,
-  space: spaceGrotesk.className,
-  playfair: playfair.className,
-  jetbrains: jetbrainsMono.className,
-  roboto: roboto.className,
-  montserrat: montserrat.className,
-};
 
 export default function ProjectPage() {
   const params = useParams();
   const slug = params.slug as string;
-
-
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  // ✅ CORRECT LOOKUP for Record<string, Project>
-  // Since projects is an object, we access it directly by key
-  const project = projects[slug];
 
-  // If the key doesn't exist, show 404
+  const project = projects[slug];
   if (!project) return notFound();
 
-  const Icon = project.icon;
-
-  // Check if we have detailed content
   const hasContent = project.problem && project.architecture;
 
-  // --- FALLBACK VIEW (Link Only) ---
+  // ── FALLBACK ──────────────────────────────────────────
   if (!hasContent) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-6 text-center text-slate-200">
-        <h1 className="mb-4 text-4xl font-bold text-white">{project.title}</h1>
-        <p className="mb-8 max-w-lg text-slate-400">
-          This project doesn't have a detailed case study yet, but you can view the source code directly.
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "var(--bg)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem",
+          textAlign: "center",
+        }}
+      >
+        <p className="label" style={{ marginBottom: "1rem" }}>Project</p>
+        <h1
+          style={{
+            fontSize: "2rem",
+            fontWeight: 300,
+            color: "var(--fg)",
+            marginBottom: "1rem",
+          }}
+        >
+          {project.title}
+        </h1>
+        <p
+          style={{
+            fontSize: "0.9rem",
+            color: "var(--fg-muted)",
+            maxWidth: "400px",
+            lineHeight: 1.7,
+            marginBottom: "2.5rem",
+          }}
+        >
+          No detailed case study yet. View the source code directly.
         </p>
-        
         <a
           href={project.github}
           target="_blank"
-          className="group flex items-center gap-2 rounded-full bg-indigo-600 px-8 py-4 font-semibold text-white transition-all hover:bg-indigo-500 hover:scale-105"
+          rel="noreferrer"
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: 500,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            padding: "12px 28px",
+            border: "1px solid var(--accent-line)",
+            borderRadius: "2px",
+            color: "var(--accent)",
+            transition: "background 0.2s ease",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.background = "var(--accent-dim)")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.background = "transparent")
+          }
         >
-          <Github size={20} />
-          View on GitHub
-          <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+          View on GitHub ↗
         </a>
       </main>
     );
   }
 
-  // --- FULL PAGE VIEW ---
+  // ── FULL PAGE ─────────────────────────────────────────
   return (
-    <main className={`min-h-screen selection:bg-white/20 ${project.theme.background} ${fontMap[project.theme.font]} text-slate-200`}>
-      
-      {/* 3. HERO: Changed header -> motion.header */}
-      <motion.header
-        initial="hidden"
-        animate="visible"
-        custom={0} // Starts immediately
-        variants={fadeIn}
-        className="relative overflow-hidden border-b border-white/10 bg-black/20 px-6 py-24 backdrop-blur-sm"
+    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+
+      {/* Back link */}
+      <div
+        style={{
+          maxWidth: "1100px",
+          margin: "0 auto",
+          padding: "2rem 1.5rem 0",
+        }}
       >
-        <div className="mx-auto max-w-6xl">
-          <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ rotate: 10, scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="mb-6 inline-block" 
+        <Link
+          href="/#projects"
+          style={{
+            fontSize: "0.62rem",
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: "var(--fg-muted)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            transition: "color 0.2s ease",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.color = "var(--fg)")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.color = "var(--fg-muted)")
+          }
+        >
+          ← All Projects
+        </Link>
+      </div>
+
+      {/* Hero */}
+      <motion.header
+        {...fade(0)}
+        style={{
+          borderBottom: "1px solid var(--border)",
+          padding: "5rem 1.5rem 4rem",
+          background: "var(--surface)",
+        }}
+      >
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <motion.p {...fade(0.1)} className="label" style={{ marginBottom: "1rem" }}>
+            Case Study
+          </motion.p>
+
+          <motion.h1
+            {...fade(0.2)}
+            className="section-heading"
+            style={{ maxWidth: "640px", marginBottom: "1.2rem" }}
+          >
+            {project.title}
+          </motion.h1>
+
+          {project.summary && (
+            <motion.p
+              {...fade(0.3)}
+              style={{
+                fontSize: "1rem",
+                lineHeight: 1.8,
+                color: "var(--fg-mid)",
+                maxWidth: "560px",
+                marginBottom: "2.5rem",
+              }}
             >
-              {/* 2. Increased size to w-16 h-16 to match the big title */}
-              <Icon className={`w-16 h-16 ${project.theme.primary}`} />
-            </motion.div>
-            <h1 className={`mb-6 text-5xl font-bold tracking-tight md:text-6xl ${project.theme.primary}`}>
-              {project.title}
-            </h1>
-            <p className="text-xl leading-relaxed text-slate-300">
               {project.summary}
-            </p>
-            
-            <div className="mt-8 flex gap-4">
+            </motion.p>
+          )}
+
+          {/* Stack */}
+          <motion.div
+            {...fade(0.35)}
+            style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "2.5rem" }}
+          >
+            {(project.stack || []).map((tech: string) => (
+              <span
+                key={tech}
+                style={{
+                  fontSize: "0.6rem",
+                  letterSpacing: "0.1em",
+                  color: "var(--fg-muted)",
+                  padding: "4px 10px",
+                  border: "1px solid var(--border)",
+                  borderRadius: "2px",
+                  textTransform: "uppercase",
+                }}
+              >
+                {tech}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* Action links */}
+          <motion.div
+            {...fade(0.4)}
+            style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}
+          >
+            {project.github && (
               <a
                 href={project.github}
                 target="_blank"
-                className={`group flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 transition-transform hover:scale-105 ${project.theme.accent}`}
+                rel="noreferrer"
+                style={{
+                  fontSize: "0.65rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  padding: "10px 22px",
+                  background: "var(--accent)",
+                  color: "#080808",
+                  borderRadius: "2px",
+                  border: "1px solid var(--accent)",
+                  transition: "opacity 0.2s ease",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.opacity = "0.85")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.opacity = "1")
+                }
               >
-                <Github size={20} />
-                View Source Code
+                Source Code ↗
               </a>
-            </div>
-          </div>
+            )}
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontSize: "0.65rem",
+                  fontWeight: 400,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  padding: "10px 22px",
+                  background: "transparent",
+                  color: "var(--fg-mid)",
+                  borderRadius: "2px",
+                  border: "1px solid var(--border)",
+                  transition: "color 0.2s ease, border-color 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "var(--fg)";
+                  e.currentTarget.style.borderColor = "var(--border-hover)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "var(--fg-mid)";
+                  e.currentTarget.style.borderColor = "var(--border)";
+                }}
+              >
+                Live Site ↗
+              </a>
+            )}
+          </motion.div>
         </div>
       </motion.header>
 
-      <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-[2fr_1fr]">
-        
-        {/* LEFT COLUMN */}
-        <div className="space-y-16">
-          
-          {/* 4. PROBLEM: Changed section -> motion.section */}
-          <motion.section
-            initial="hidden"
-            whileInView="visible" // Triggers animation when scrolled into view
-            viewport={{ once: true }}
-            custom={0.1} // Slight delay
-            variants={fadeIn}
-            className="group"
-          >
-            <div className={`mb-4 flex items-center gap-3 ${project.theme.primary}`}>
-              <AlertCircle size={24} />
-              <h2 className="text-sm font-bold uppercase tracking-widest opacity-80">The Challenge</h2>
-            </div>
-            <h3 className="mb-4 text-3xl font-semibold text-white">Defining the Problem</h3>
-            <p className="text-lg leading-relaxed text-slate-300">
+      {/* Body */}
+      <div
+        style={{
+          maxWidth: "1100px",
+          margin: "0 auto",
+          padding: "5rem 1.5rem",
+          display: "grid",
+          gridTemplateColumns: "1.8fr 1fr",
+          gap: "5rem",
+          alignItems: "start",
+        }}
+      >
+        {/* Left — content */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "4rem" }}>
+
+          {/* Problem */}
+          <motion.section {...fadeInView(0)}>
+            <p className="label" style={{ marginBottom: "0.8rem" }}>The Challenge</p>
+            <span className="accent-rule" style={{ marginBottom: "1.5rem", display: "block" }} />
+            <p style={{ fontSize: "1rem", lineHeight: 1.85, color: "var(--fg-mid)" }}>
               {project.problem}
             </p>
           </motion.section>
 
-          <hr className="border-white/10" />
-
-          {/* 5. ARCHITECTURE: Changed section -> motion.section */}
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            custom={0.2}
-            variants={fadeIn}
-            className="group"
-          >
-             <div className={`mb-4 flex items-center gap-3 ${project.theme.primary}`}>
-              <Layers size={24} />
-              <h2 className="text-sm font-bold uppercase tracking-widest opacity-80">System Design</h2>
-            </div>
-            <h3 className="mb-4 text-3xl font-semibold text-white">Architecture & Logic</h3>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-8 hover:border-white/20 transition-colors">
-              <p className="text-lg leading-relaxed text-slate-200">
+          {/* Architecture */}
+          <motion.section {...fadeInView(0.1)}>
+            <p className="label" style={{ marginBottom: "0.8rem" }}>Architecture</p>
+            <span className="accent-rule" style={{ marginBottom: "1.5rem", display: "block" }} />
+            <div
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "3px",
+                padding: "1.8rem 2rem",
+                transition: "border-color 0.2s ease",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.borderColor = "var(--accent-line)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.borderColor = "var(--border)")
+              }
+            >
+              <p style={{ fontSize: "0.95rem", lineHeight: 1.85, color: "var(--fg-mid)" }}>
                 {project.architecture}
               </p>
             </div>
           </motion.section>
 
-           {/* 6. KEY FOCUS: Changed section -> motion.section */}
-           <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            custom={0.3}
-            variants={fadeIn}
-            className="group"
-          >
-             <div className={`mb-4 flex items-center gap-3 ${project.theme.primary}`}>
-              <Target size={24} />
-              <h2 className="text-sm font-bold uppercase tracking-widest opacity-80">Key Focus</h2>
-            </div>
-            <p className="text-lg leading-relaxed text-slate-300">
+          {/* Key Focus */}
+          <motion.section {...fadeInView(0.15)}>
+            <p className="label" style={{ marginBottom: "0.8rem" }}>Key Focus</p>
+            <span className="accent-rule" style={{ marginBottom: "1.5rem", display: "block" }} />
+            <p style={{ fontSize: "0.95rem", lineHeight: 1.8, color: "var(--fg-mid)" }}>
               {project.keyFocus}
             </p>
           </motion.section>
 
+          {/* Screenshots */}
           {project.screenshots && project.screenshots.length > 0 && (
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              custom={0.4}
-              variants={fadeIn}
-              className="group"
-            >
-              <div className={`mb-4 flex items-center gap-3 ${project.theme.primary}`}>
-                <Terminal size={24} />
-                <h2 className="text-sm font-bold uppercase tracking-widest opacity-80">Implementation</h2>
-              </div>
-              <h3 className="mb-6 text-3xl font-semibold text-white">Code & API Testing</h3>
-              
-              <div className="space-y-8">
-              {project.screenshots.map((snap: any, idx: number) => (
-                <div key={idx} className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-colors hover:border-white/20">
-                  
-                  {/* 👇 Media Area (Now handles both Images and PDFs) */}
-                  <div className="relative w-full overflow-hidden border-b border-white/10 bg-black/50 flex items-center justify-center min-h-[250px]">
+            <motion.section {...fadeInView(0.2)}>
+              <p className="label" style={{ marginBottom: "0.8rem" }}>Implementation</p>
+              <span className="accent-rule" style={{ marginBottom: "1.5rem", display: "block" }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {project.screenshots.map((snap: any, idx: number) => (
+                  <div
+                    key={idx}
+                    style={{
+                      border: "1px solid var(--border)",
+                      borderRadius: "3px",
+                      overflow: "hidden",
+                      background: "var(--surface)",
+                    }}
+                  >
                     {snap.isPdf ? (
-                      // --- RENDER THIS IF IT IS A PDF ---
-                      <div className="flex flex-col items-center justify-center p-12 text-center">
-                        <div className="mb-4 rounded-full bg-white/10 p-4">
-                          {/* Simple Document Icon */}
-                          <svg className="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                        <a 
-                          href={snap.image} // Still uses snap.image as the file path
+                      <div
+                        style={{
+                          padding: "3rem",
+                          textAlign: "center",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: "1rem",
+                        }}
+                      >
+                        <p style={{ fontSize: "0.75rem", color: "var(--fg-muted)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                          Document
+                        </p>
+                        <a
+                          href={snap.image}
                           target="_blank"
-                          rel="noopener noreferrer"
-                          className="rounded-lg bg-indigo-500/20 px-6 py-3 text-sm font-medium text-indigo-300 transition-all hover:bg-indigo-500/40"
+                          rel="noreferrer"
+                          style={{
+                            fontSize: "0.65rem",
+                            letterSpacing: "0.15em",
+                            textTransform: "uppercase",
+                            color: "var(--accent)",
+                            padding: "10px 20px",
+                            border: "1px solid var(--accent-line)",
+                            borderRadius: "2px",
+                          }}
                         >
-                          Open Full PDF Document ↗
+                          Open PDF ↗
                         </a>
                       </div>
                     ) : (
-                      // --- RENDER THIS IF IT IS AN IMAGE (Your exact original code) ---
-                      <img 
-                        src={snap.image} 
+                      <img
+                        src={snap.image}
                         alt={snap.title}
-                        className="w-full cursor-pointer object-contain transition-transform duration-300 hover:scale-[1.02]"
-                        onClick={() => setSelectedImage(snap.image)} 
+                        style={{
+                          width: "100%",
+                          display: "block",
+                          cursor: "zoom-in",
+                          objectFit: "contain",
+                          transition: "opacity 0.2s ease",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.opacity = "0.9")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.opacity = "1")
+                        }
+                        onClick={() => setSelectedImage(snap.image)}
                       />
                     )}
+                    <div
+                      style={{
+                        padding: "1.2rem 1.5rem",
+                        borderTop: "1px solid var(--border)",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "0.78rem",
+                          fontWeight: 500,
+                          color: "var(--fg)",
+                          marginBottom: "0.3rem",
+                        }}
+                      >
+                        {snap.title}
+                      </p>
+                      <p style={{ fontSize: "0.72rem", lineHeight: 1.6, color: "var(--fg-muted)" }}>
+                        {snap.description}
+                      </p>
+                    </div>
                   </div>
-
-                  {/* Descriptive Text Area */}
-                  <div className="p-6">
-                    <h4 className="mb-2 text-lg font-semibold text-white">{snap.title}</h4>
-                    <p className="text-sm leading-relaxed text-slate-400">
-                      {snap.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
             </motion.section>
           )}
         </div>
 
-        {/* 7. SIDEBAR: Changed aside -> motion.aside */}
+        {/* Right — sidebar */}
         <motion.aside
-          initial="hidden"
-          animate="visible"
-          custom={0.4} // Loads last
-          variants={fadeIn}
-          className="space-y-8 md:sticky md:top-10 md:h-fit"
+          {...fade(0.3)}
+          style={{ position: "sticky", top: "2rem" }}
         >
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <h3 className="mb-6 font-semibold text-white flex items-center gap-2">
-              ⚡ Technologies Used
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {(project.stack || []).map((tech: string, index: number) => (
+          {/* Tech stack */}
+          <div
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "3px",
+              padding: "1.5rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <p className="label" style={{ marginBottom: "1rem" }}>Stack</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+              {(project.stack || []).map((tech: string) => (
                 <span
-                  key={index}
-                  className={`cursor-default select-none rounded-md border border-white/10 bg-black/20 px-3 py-1.5 text-sm font-medium transition-colors ${project.theme.primary}`}
+                  key={tech}
+                  style={{
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.08em",
+                    color: "var(--fg-mid)",
+                    padding: "4px 10px",
+                    border: "1px solid var(--border)",
+                    borderRadius: "2px",
+                    textTransform: "uppercase",
+                  }}
                 >
                   {tech}
                 </span>
@@ -296,64 +442,126 @@ export default function ProjectPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <h3 className="mb-4 font-semibold text-white">Project Details</h3>
-            <ul className="space-y-4 text-sm text-slate-400">
-              <li className="flex justify-between border-b border-white/10 pb-2">
-                <span>Type</span>
-                <span className="text-slate-200">Backend System</span>
-              </li>
-              <li className="flex justify-between border-b border-white/10 pb-2">
-                <span>Role</span>
-                <span className="text-slate-200">Lead Developer</span>
-              </li>
-              <li className="flex items-center justify-between pt-2">
-                <span>Repository</span>
-                <a 
-                  href={project.github} 
-                  target="_blank" 
-                  className={`flex items-center gap-1 font-medium hover:underline ${project.theme.primary}`}
+          {/* Project meta */}
+          <div
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "3px",
+              padding: "1.5rem",
+            }}
+          >
+            <p className="label" style={{ marginBottom: "1rem" }}>Details</p>
+            {[
+              { key: "Type",       value: "Backend System"   },
+              { key: "Role",       value: "Lead Developer"   },
+              { key: "Repository", value: "github.com ↗", href: project.github },
+            ].map((row, i, arr) => (
+              <div
+                key={row.key}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "0.7rem 0",
+                  borderBottom: i < arr.length - 1 ? "1px solid var(--border)" : "none",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "0.62rem",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--fg-muted)",
+                  }}
                 >
-                  github.com <ArrowUpRight size={14} />
-                </a>
-              </li>
-            </ul>
+                  {row.key}
+                </span>
+                {row.href ? (
+                  <a
+                    href={row.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      fontSize: "0.72rem",
+                      color: "var(--accent)",
+                      transition: "opacity 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+                    onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                  >
+                    {row.value}
+                  </a>
+                ) : (
+                  <span style={{ fontSize: "0.72rem", color: "var(--fg-mid)" }}>
+                    {row.value}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </motion.aside>
       </div>
 
-      {/* 8. IMAGE MODAL */}
+      {/* Image lightbox */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedImage(null)} // Clicking the background closes it
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
+            onClick={() => setSelectedImage(null)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 50,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "rgba(0,0,0,0.92)",
+              backdropFilter: "blur(8px)",
+              padding: "2rem",
+              cursor: "zoom-out",
+            }}
           >
-            {/* Close Button */}
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute right-6 top-6 z-50 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 md:right-10 md:top-10"
+              style={{
+                position: "absolute",
+                top: "1.5rem",
+                right: "1.5rem",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "2px",
+                color: "var(--fg-mid)",
+                padding: "8px 12px",
+                cursor: "pointer",
+                fontSize: "0.7rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
             >
-              <X size={24} />
+              Close ✕
             </button>
-
-            {/* The Enlarged Image */}
             <motion.img
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.95 }}
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ duration: 0.25 }}
               src={selectedImage}
               alt="Enlarged view"
-              className="max-h-[90vh] max-w-full rounded-lg object-contain shadow-2xl"
-              onClick={(e) => e.stopPropagation()} // Prevents clicking the actual image from closing the modal
+              style={{
+                maxHeight: "90vh",
+                maxWidth: "100%",
+                objectFit: "contain",
+                borderRadius: "3px",
+                border: "1px solid var(--border)",
+              }}
+              onClick={(e) => e.stopPropagation()}
             />
           </motion.div>
         )}
       </AnimatePresence>
-
     </main>
   );
 }

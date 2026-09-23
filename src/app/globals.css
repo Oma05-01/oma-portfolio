@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ── DESIGN TOKENS ───────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --bg:           #080808;
+  --fg:           #e8e4de;
+  --fg-muted:     rgba(232, 228, 222, 0.45);
+  --fg-mid:       rgba(232, 228, 222, 0.70);
+  --accent:       #c8a97e;          /* warm gold — consistent across all components */
+  --accent-dim:   rgba(200, 169, 126, 0.12);
+  --accent-line:  rgba(200, 169, 126, 0.22);
+  --surface:      rgba(255, 255, 255, 0.035);
+  --surface-hover:rgba(255, 255, 255, 0.06);
+  --border:       rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+}
+
+/* ── BASE ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), sans-serif; /* FIXED: was Arial */
+  min-height: 100vh;
+  overflow-x: hidden;
 }
+
+a { text-decoration: none; color: inherit; }
+
+/* ── TYPOGRAPHY SCALE ────────────────────────────────── */
+.display {
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--fg);
+}
+
+.section-heading {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.body-text {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--fg-mid);
+}
+
+/* ── ACCENT LINE ─────────────────────────────────────── */
+.accent-rule {
+  width: 32px;
+  height: 1px;
+  background: var(--accent);
+  display: block;
+}
+
+/* ── SCROLLBAR ───────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent-line); border-radius: 2px; }

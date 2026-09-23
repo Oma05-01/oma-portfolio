@@ -1,6 +1,7 @@
 import Hero from "../sections/Hero";
 import About from "../sections/About";
 import Projects from "../sections/Projects";
+import Contact from "../sections/Contact";
 import ProfileSnippet from "@/components/ProfileSnippet";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <ProfileSnippet />
       <About />
       <Projects />
+      <Contact />
     </>
   );
 }

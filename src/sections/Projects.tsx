@@ -1,155 +1,172 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { li } from "framer-motion/client";
-import Link from "next/link"; // Improved: Use Next.js Link for internal navigation
+import Link from "next/link";
 
 const projects = [
-{
-  title: "Tax Estimation Engine (2026 Act)",
-  slug: "tax-estimator",
-  summary: "Client-side, WASM-powered tax calculation engine featuring dynamic user profiling, proportional tax distribution, and automated receipt generation.",
-  problem: "Nigerian tax estimation involves complex progressive brackets, profile-specific statutory reliefs, and severe privacy risks when uploading sensitive bank statements to external servers.",
-  architecture: "Privacy-first architecture leveraging WebAssembly (Pyodide) for zero-server data parsing, paired with a React state engine that dynamically adapts progressive tax models based on user profiles.",
-  keyFocus: "Secure client-side data processing, proportional tax distribution algorithms, state-locked interactive workflows, and dynamic statutory relief calculation.",
-  stack: ["React", "TypeScript", "WebAssembly (Pyodide)", "Tailwind CSS"],
-  github: "https://github.com/Oma05-01/TaxEstimator",
-  liveUrl: "https://tax-esteem.vercel.app/",
-  theme: {
-    primary: "text-blue-500",
-    background: "bg-slate-900",
-    accent: "hover:text-blue-400",
-    font: "inter" // Replace with the font used in your portfolio
-  },
-},
   {
-    title: "Modular LMS Backend System",
+    title: "Tax Estimation Engine",
+    subtitle: "2026 Finance Act",
+    slug: "tax-estimator",
+    problem:
+      "Nigerian tax estimation involves complex progressive brackets, profile-specific statutory reliefs, and severe privacy risks when uploading sensitive bank statements to external servers.",
+    architecture:
+      "Privacy-first architecture leveraging WebAssembly (Pyodide) for zero-server data parsing, paired with a React state engine that dynamically adapts progressive tax models based on user profiles.",
+    keyFocus: "Secure client-side data processing · proportional tax distribution · dynamic statutory relief calculation",
+    stack: ["React", "TypeScript", "WebAssembly (Pyodide)", "Tailwind CSS"],
+    github: "https://github.com/Oma05-01/TaxEstimator",
+    liveUrl: "https://tax-esteem.vercel.app/",
+    hasApi: false,
+  },
+  {
+    title: "Modular LMS Backend",
+    subtitle: "Educational Platform",
+    slug: "lms-platform",
     problem:
       "Educational platforms require strict role-based access control, dynamic enrollment handling, timed course access, and secure content delivery tied to payment status.",
     architecture:
-      "Built a layered backend system connecting Course → Package → Payment → Enrollment → Content access. Implemented a content state engine (LOCKED/AVAILABLE/COMPLETED), quiz submission workflow with answer tracking, resource analytics logging (views/downloads), JWT-based authentication, and role-restricted admin/student endpoints.",
-    keyFocus: "Access Control, Enrollment Logic & Learning Progress Tracking",
+      "Layered backend system connecting Course → Package → Payment → Enrollment → Content access. Content state engine (LOCKED / AVAILABLE / COMPLETED), quiz submission workflow, resource analytics logging, JWT auth, and role-restricted endpoints.",
+    keyFocus: "Access control · enrollment logic · learning progress tracking",
     stack: ["Python", "Django", "Django REST Framework", "SimpleJWT", "Celery", "Channels"],
     github: "https://github.com/drid-uniben/django-backend",
-    slug: "lms-platform",
-    hasApi: false, // Added this flag to indicate API documentation availability
-    theme: {
-      primary: "text-blue-400",
-      background: "bg-slate-950",
-      accent: "hover:text-blue-300",
-    },
+    hasApi: false,
   },
   {
     title: "Hospital Management System",
+    subtitle: "Healthcare Backend",
+    slug: "hospital-system",
     problem:
       "Healthcare workflows were fragmented, requiring structured role-based access and appointment tracking.",
     architecture:
-      "Designed a modular Django backend with role-based authentication and REST API endpoints for Flutter integration.",
-    keyFocus: "Role-Based Access Control & API Architecture",
+      "Modular Django backend with role-based authentication and REST API endpoints designed for Flutter client integration.",
+    keyFocus: "Role-based access control · API architecture",
     stack: ["Python", "Django", "REST API", "PostgreSQL"],
     github: "https://github.com/Oma05-01/hospital",
-    slug: "hospital-system",
-    hasApi: true,
     liveUrl: "https://hospital-or65.onrender.com",
-    theme: {
-      primary: "text-blue-400",
-      background: "bg-slate-950",
-      accent: "hover:text-blue-300",
-    },
+    hasApi: true,
   },
   {
     title: "Odyce Perfume Store",
+    subtitle: "E-commerce Backend",
+    slug: "odyce-store",
     problem:
-      "Needed a scalable backend to handle authentication, product management, and order logic.",
+      "Needed a scalable backend to handle authentication, product management, and order logic for a consumer perfume storefront.",
     architecture:
-      "Built structured Django models and implemented authentication flows with clean separation of concerns.",
-    keyFocus: "E-commerce Logic & Authentication Flows",
+      "Structured Django models with clean separation of concerns across authentication, product cataloguing, and order management.",
+    keyFocus: "E-commerce logic · authentication flows",
     stack: ["Python", "Django", "HTML", "CSS"],
     github: "https://github.com/Oma05-01/Odyce",
-    slug: "odyce-store",
-    hasApi: false,
     liveUrl: "https://main-ie29.onrender.com/",
-    theme: {
-      primary: "text-rose-400",
-      background: "bg-black",
-      accent: "hover:text-rose-300",
-    },
+    hasApi: false,
   },
   {
     title: "QuestNest Infrastructure Engine",
+    subtitle: "Operational Platform",
+    slug: "questnest",
     problem:
       "Operational platforms often lack organisation-scoped identity control, lifecycle enforcement, and traceable automation across assets and payments.",
     architecture:
-      "Designed an infrastructure-first Django system centered on organisation ownership, lifecycle state validation, and event-driven automation with task generation.",
-    keyFocus: "Operational Infrastructure & Automation",
+      "Infrastructure-first Django system centred on organisation ownership, lifecycle state validation, and event-driven automation with task generation.",
+    keyFocus: "Operational infrastructure · automation · event-driven architecture",
     stack: ["Python", "Django", "PostgreSQL", "Event-Driven Architecture"],
     github: "https://github.com/Oma05-01/QuestNest",
-    slug: "questnest",
     hasApi: false,
   },
-  {
-    title: "DRID Student Platform Contribution",
-    problem:
-      "Institutional digital systems required backend flow improvements and logic restructuring.",
-    architecture:
-      "Contributed backend logic fixes and improved system reliability during peak usage.",
-    keyFocus: "Backend Logic Optimization",
-    stack: ["Python", "Django"],
-    github: "https://drid.uniben.edu/",
-    slug: "drid-platform", // Added a slug here to prevent errors
-    hasApi: false,
-  }
 ];
 
 export default function Projects() {
   return (
     <section
       id="projects"
-      className="relative overflow-hidden bg-slate-950 px-6 py-24 text-white"
+      style={{
+        background: "var(--bg)",
+        padding: "8rem 1.5rem",
+        borderTop: "1px solid var(--border)",
+      }}
     >
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-20 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-purple-600/20 blur-[120px]"></div>
-      </div>
+      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
 
-      <div className="mx-auto max-w-6xl">
-        <h2 className="mb-12 text-center text-4xl font-bold">
-          Selected Projects
-        </h2>
+        {/* Heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+          viewport={{ once: true }}
+          style={{ marginBottom: "4rem" }}
+        >
+          <p className="label" style={{ marginBottom: "0.8rem" }}>
+            Selected Work
+          </p>
+          <h2 className="section-heading">
+            Projects
+          </h2>
+        </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        {/* Project list */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
           {projects.map((project, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
+              key={project.slug}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.07, ease: [0.4, 0, 0.2, 1] }}
               viewport={{ once: true }}
-              className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900 p-6 transition-all duration-300 hover:-translate-y-2 hover:border-slate-600 hover:shadow-2xl hover:shadow-purple-500/10"
+              style={{
+                borderTop: "1px solid var(--border)",
+                padding: "2rem 0",
+                display: "grid",
+                gridTemplateColumns: "1fr 1.8fr auto",
+                gap: "2.5rem",
+                alignItems: "start",
+                transition: "background 0.2s ease",
+                cursor: "default",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "var(--surface)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "transparent")
+              }
             >
-              <div>
-                <h3 className="mb-4 text-xl font-semibold">{project.title}</h3>
-
-                <p className="mb-3 text-slate-400">
-                  <span className="font-semibold text-white">Problem:</span>{" "}
-                  {project.problem}
+              {/* Left — title */}
+              <div style={{ paddingRight: "1rem" }}>
+                <p
+                  style={{
+                    fontSize: "0.58rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "var(--accent)",
+                    fontWeight: 500,
+                    marginBottom: "0.4rem",
+                  }}
+                >
+                  {project.subtitle}
                 </p>
-
-                <p className="mb-3 text-slate-400">
-                  <span className="font-semibold text-white">Architecture:</span>{" "}
-                  {project.architecture}
-                </p>
-
-                <p className="mb-4 text-slate-300">
-                  <span className="font-semibold text-white">Focus:</span>{" "}
-                  {project.keyFocus}
-                </p>
-
-                <div className="mb-6 flex flex-wrap gap-2">
-                  {project.stack.map((tech, i) => (
+                <h3
+                  style={{
+                    fontSize: "1.05rem",
+                    fontWeight: 400,
+                    color: "var(--fg)",
+                    lineHeight: 1.3,
+                    marginBottom: "0.8rem",
+                  }}
+                >
+                  {project.title}
+                </h3>
+                {/* Stack tags */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {project.stack.map((tech) => (
                     <span
-                      key={i}
-                      className="rounded-full bg-slate-800 px-3 py-1 text-sm"
+                      key={tech}
+                      style={{
+                        fontSize: "0.58rem",
+                        letterSpacing: "0.08em",
+                        color: "var(--fg-muted)",
+                        padding: "3px 8px",
+                        border: "1px solid var(--border)",
+                        borderRadius: "2px",
+                        whiteSpace: "nowrap",
+                      }}
                     >
                       {tech}
                     </span>
@@ -157,53 +174,129 @@ export default function Projects() {
                 </div>
               </div>
 
-              {/* Corrected Link Section */}
-              {/* --- ACTION LINKS AREA --- */}
-              <div className="mt-6 flex flex-col gap-4">
-                
-                {/* Primary CTA (Takes up its own row) */}
-                <div>
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    className="inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 px-5 py-2.5 text-sm font-medium text-indigo-400 transition-all hover:bg-indigo-500/10 hover:text-indigo-300"
-                  >
-                    Read Case Study →
-                  </Link>
-                </div>
+              {/* Middle — description */}
+              <div>
+                <p
+                  style={{
+                    fontSize: "0.82rem",
+                    lineHeight: 1.75,
+                    color: "var(--fg-mid)",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  {project.problem}
+                </p>
+                <p
+                  style={{
+                    fontSize: "0.75rem",
+                    lineHeight: 1.7,
+                    color: "var(--fg-muted)",
+                    fontStyle: "italic",
+                  }}
+                >
+                  {project.keyFocus}
+                </p>
+              </div>
 
-                {/* Secondary Links (Wrapped and grouped below) */}
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-slate-800/60 pt-4">
-                  
+              {/* Right — links */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                  alignItems: "flex-end",
+                  flexShrink: 0,
+                }}
+              >
+                <Link
+                  href={`/projects/${project.slug}`}
+                  style={{
+                    fontSize: "0.65rem",
+                    fontWeight: 500,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: "var(--accent)",
+                    padding: "7px 14px",
+                    border: "1px solid var(--accent-line)",
+                    borderRadius: "2px",
+                    whiteSpace: "nowrap",
+                    transition: "background 0.2s ease, border-color 0.2s ease",
+                    display: "inline-block",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "var(--accent-dim)";
+                    e.currentTarget.style.borderColor = "var(--accent)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.borderColor = "var(--accent-line)";
+                  }}
+                >
+                  Case Study ↗
+                </Link>
+
+                <div style={{ display: "flex", gap: "10px" }}>
                   {project.github && (
                     <a
                       href={project.github}
                       target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium text-slate-400 transition-colors hover:text-white flex items-center gap-1"
+                      rel="noreferrer"
+                      style={{
+                        fontSize: "0.62rem",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: "var(--fg-muted)",
+                        transition: "color 0.2s ease",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.color = "var(--fg)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.color = "var(--fg-muted)")
+                      }
                     >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd"></path></svg>
                       Code
                     </a>
                   )}
-
                   {project.liveUrl && (
                     <a
                       href={project.liveUrl}
                       target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium text-emerald-400/80 transition-colors hover:text-emerald-300 flex items-center gap-1"
+                      rel="noreferrer"
+                      style={{
+                        fontSize: "0.62rem",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: "var(--fg-muted)",
+                        transition: "color 0.2s ease",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.color = "var(--fg)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.color = "var(--fg-muted)")
+                      }
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                       Live
                     </a>
                   )}
-
                   {project.hasApi && (
                     <Link
                       href={`/api-docs/${project.slug}`}
-                      className="text-sm font-medium text-indigo-400/80 transition-colors hover:text-indigo-300 flex items-center gap-1"
+                      style={{
+                        fontSize: "0.62rem",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: "var(--fg-muted)",
+                        transition: "color 0.2s ease",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.color = "var(--fg)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.color = "var(--fg-muted)")
+                      }
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                       API
                     </Link>
                   )}
@@ -211,6 +304,9 @@ export default function Projects() {
               </div>
             </motion.div>
           ))}
+
+          {/* Bottom border */}
+          <div style={{ borderTop: "1px solid var(--border)" }} />
         </div>
       </div>
     </section>

@@ -2,33 +2,118 @@
 
 import { motion } from "framer-motion";
 
+const skills = [
+  { label: "Core",      items: "Python · Django · Django REST Framework · PostgreSQL" },
+  { label: "Tooling",   items: "Celery · Docker · JWT · Channels" },
+  { label: "Exposure",  items: "React · Next.js · FastAPI · Flutter · Node.js" },
+];
+
 export default function About() {
   return (
-    <section id="about" className="bg-slate-950 text-white py-24 px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="max-w-4xl mx-auto text-center"
-      >
-        <h2 className="text-4xl font-bold mb-8">About</h2>
+    <section
+      id="about"
+      style={{
+        background: "var(--bg)",
+        padding: "8rem 1.5rem",
+        borderTop: "1px solid var(--border)",
+      }}
+    >
+      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
 
-        <p className="text-slate-400 text-lg leading-relaxed">
-          I transitioned from Mechanical Engineering into software development
-          because I am deeply interested in systems — how they are structured,
-          how they scale, and how small architectural decisions affect long-term
-          performance. My focus is backend development using Python and Django,
-          where I design clean, maintainable APIs and structured workflows.
-        </p>
+        {/* Two-column layout */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1.4fr",
+            gap: "5rem",
+            alignItems: "start",
+          }}
+        >
+          {/* Left — heading + label */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+            viewport={{ once: true }}
+          >
+            <p className="label" style={{ marginBottom: "1rem" }}>
+              About
+            </p>
+            <h2 className="section-heading" style={{ marginBottom: "1.5rem" }}>
+              Systems thinker,<br />
+              <span style={{ color: "var(--fg-muted)" }}>backend builder.</span>
+            </h2>
+            <span className="accent-rule" />
 
-        <p className="text-slate-400 text-lg leading-relaxed mt-6">
-          Beyond building applications, I am continuously exploring deeper
-          concepts in systems design, performance, and backend architecture.
-          I enjoy solving real-world problems and turning complexity into
-          structured, scalable solutions.
-        </p>
-      </motion.div>
+            {/* Skills table */}
+            <div style={{ marginTop: "2.5rem", display: "flex", flexDirection: "column", gap: "1.2rem" }}>
+              {skills.map((s) => (
+                <div key={s.label}>
+                  <p
+                    style={{
+                      fontSize: "0.58rem",
+                      letterSpacing: "0.2em",
+                      textTransform: "uppercase",
+                      color: "var(--accent)",
+                      marginBottom: "0.3rem",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {s.label}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: "0.78rem",
+                      color: "var(--fg-mid)",
+                      lineHeight: 1.6,
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {s.items}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Right — body copy */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
+            viewport={{ once: true }}
+            style={{ paddingTop: "0.5rem" }}
+          >
+            <p
+              style={{
+                fontSize: "1.05rem",
+                lineHeight: 1.85,
+                color: "var(--fg-mid)",
+                marginBottom: "1.5rem",
+              }}
+            >
+              I transitioned from Mechanical Engineering into software because
+              I'm drawn to the same question in both fields: how do you design
+              something that holds up under load? In backend development that
+              means clean data models, well-scoped APIs, and architecture that
+              doesn't need to be rewritten when requirements change.
+            </p>
+
+            <p
+              style={{
+                fontSize: "1.05rem",
+                lineHeight: 1.85,
+                color: "var(--fg-muted)",
+              }}
+            >
+              My current focus is systems design — understanding the decisions
+              that sit below the framework level and affect everything above it.
+              I'm available for backend roles and open to remote or Lagos-based
+              opportunities.
+            </p>
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

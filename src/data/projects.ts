@@ -64,6 +64,7 @@ export const projects: Record<string, Project> = {
     accent: "hover:text-purple-300",
     font: "space"
   },
+  // update with actual screenshots and descriptions relevant to the odyce project
   screenshots: [
     {
       title: "Database Architecture",
@@ -111,13 +112,13 @@ export const projects: Record<string, Project> = {
     {
       title: "High-Level System Architecture",
       description: "Architecture diagram illustrating the Flutter mobile client integration, synchronous RBAC API flow, and asynchronous background task delegation.",
-      image: "/hospital-arch.png",// Save your Eraser export as this
+      image: "/hospital-arch.png",
       isPdf: false,
     },
     {
       title: "Authentication API via Postman",
       description: "Testing the JWT token generation and role-based access validation for doctors and admins.",
-      image: "/postman-test.png" // Place an image named this in your 'public' folder
+      image: "/postman-test.png"
     },
   ],
   },
@@ -201,5 +202,3 @@ export const projects: Record<string, Project> = {
   ]
   },
 };
-
-
