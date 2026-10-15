@@ -142,22 +142,41 @@ export const projects: Record<string, Project> = {
     },
   },
   "questnest": {
-  title: "QuestNest Infrastructure Engine",
-  slug: "questnest",
-  summary: "Organisation-centric operational infrastructure powering rentals, payments, escrow automation, and audit traceability.",
-  problem: "Traditional property platforms lack identity-first infrastructure, lifecycle enforcement, and operational traceability across payments, assets, and roles.",
-  architecture: "Infrastructure-first Django system built around organisation scoping, lifecycle engines, rule-driven automation, and event-based audit logging.",
-  keyFocus: "Operational automation, lifecycle validation, event-driven task creation, and multi-organisation asset management.",
-  stack: ["Django", "PostgreSQL", "Event-Driven Architecture", "Role-Based Access Control"],
-  github: "https://github.com/Oma05-01/QuestNest",
-  icon: Building2, // or Home / Layers depending on your icon library
-  theme: {
-    primary: "text-stone-400",
-    background: "bg-slate-950",
-    accent: "hover:text-stone-300",
-    font: "roboto"
+    title: "QuestNest Multi-Tenant Platform",
+    slug: "questnest",
+    summary: "A context-aware PropTech platform enabling seamless switching between personal tenant hubs and corporate management portfolios.",
+    problem: "Traditional PropTech forces users into rigid 'Landlord' or 'Tenant' silos at signup, fragmenting identity management and cross-portfolio asset handling.",
+    architecture: "Asynchronous Django 6.0 backend with a custom Workspace/Membership ORM, unified JWT auth, and a React 18 context-driven frontend.",
+    keyFocus: "Multi-tenant data isolation, dynamic session contexts, unified authentication, and granular RBAC.",
+    stack: ["Django 6.0", "React 18", "PostgreSQL", "ASGI / Daphne", "Tailwind v4"],
+    github: "https://github.com/Oma05-01/QuestNest",
+    icon: Building2, 
+    theme: {
+      primary: "text-blue-400", // Updated to reflect the 'quest-blue' used in your Tailwind config
+      background: "bg-slate-950",
+      accent: "hover:text-blue-300",
+      font: "roboto"
+    },
+    screenshots: [
+      {
+        title: "Multi-Tenant Data Model",
+        description: "Entity-Relationship Diagram detailing the Workspace and Membership schemas that drive the platform's role-based data isolation.",
+        image: "/docs/questnest-schema.pdf", 
+        isPdf: true, 
+      },
+      {
+        title: "Unified Authentication Engine",
+        description: "The API-driven login and onboarding flow that dynamically routes users to either a personal hub or a business portfolio configuration.",
+        image: "/questnest-auth-flow.png", 
+        isPdf: false,
+      },
+      {
+        title: "Context-Aware Dashboard",
+        description: "The React frontend utilizing WorkspaceContext to seamlessly re-skin layouts and datasets based on the active user role and environment.",
+        image: "/questnest-dashboard-switch.png" 
+      },
+    ],
   },
-},
 "tax-estimator" :{
   title: "Tax Estimation Engine",
   slug: "tax-estimator",
