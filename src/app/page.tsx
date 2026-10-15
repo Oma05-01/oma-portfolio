@@ -9,7 +9,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 async function getPortfolioData() {
   try {
     
-    const res = await fetch(`\${API_URL}/api/categories/`, {
+    const res = await fetch(`${API_URL}/api/categories/`, {
       next: { revalidate: 60 } 
     });
     if (!res.ok) throw new Error('Failed to fetch data');
