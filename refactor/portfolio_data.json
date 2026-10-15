@@ -1,0 +1,257 @@
+[
+{
+  "model": "portfolio.category",
+  "pk": 1,
+  "fields": {
+    "name": "Software Engineering",
+    "slug": "software-engineering",
+    "order": 1
+  }
+},
+{
+  "model": "portfolio.category",
+  "pk": 2,
+  "fields": {
+    "name": "AI Engineering",
+    "slug": "ai-engineering",
+    "order": 2
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 1,
+  "fields": {
+    "name": "React"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 2,
+  "fields": {
+    "name": "TypeScript"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 3,
+  "fields": {
+    "name": "WebAssembly (Pyodide)"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 4,
+  "fields": {
+    "name": "Tailwind CSS"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 5,
+  "fields": {
+    "name": "Python"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 6,
+  "fields": {
+    "name": "Django"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 7,
+  "fields": {
+    "name": "Django REST Framework"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 8,
+  "fields": {
+    "name": "SimpleJWT"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 9,
+  "fields": {
+    "name": "Celery"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 10,
+  "fields": {
+    "name": "Channels"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 11,
+  "fields": {
+    "name": "REST API"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 12,
+  "fields": {
+    "name": "PostgreSQL"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 13,
+  "fields": {
+    "name": "HTML"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 14,
+  "fields": {
+    "name": "CSS"
+  }
+},
+{
+  "model": "portfolio.technology",
+  "pk": 15,
+  "fields": {
+    "name": "Event-Driven Architecture"
+  }
+},
+{
+  "model": "portfolio.project",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "title": "Tax Estimation Engine",
+    "slug": "tax-estimator",
+    "summary": "2026 Finance Act",
+    "problem": "Nigerian tax estimation involves complex progressive brackets, profile-specific statutory reliefs, and severe privacy risks when uploading sensitive bank statements to external servers.",
+    "architecture": "Privacy-first architecture leveraging WebAssembly (Pyodide) for zero-server data parsing, paired with a React state engine that dynamically adapts progressive tax models based on user profiles.",
+    "key_focus": "Secure client-side data processing · proportional tax distribution · dynamic statutory relief calculation",
+    "has_api": false,
+    "github_url": "https://github.com/Oma05-01/TaxEstimator",
+    "live_url": "https://tax-esteem.vercel.app/",
+    "icon_name": "Layout",
+    "theme_config": {},
+    "is_published": true,
+    "order": 0,
+    "stack": [
+      1,
+      2,
+      3,
+      4
+    ]
+  }
+},
+{
+  "model": "portfolio.project",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "title": "Modular LMS Backend",
+    "slug": "lms-platform",
+    "summary": "Educational Platform",
+    "problem": "Educational platforms require strict role-based access control, dynamic enrollment handling, timed course access, and secure content delivery tied to payment status.",
+    "architecture": "Layered backend system connecting Course → Package → Payment → Enrollment → Content access. Content state engine (LOCKED / AVAILABLE / COMPLETED), quiz submission workflow, resource analytics logging, JWT auth, and role-restricted endpoints.",
+    "key_focus": "Access control · enrollment logic · learning progress tracking",
+    "has_api": false,
+    "github_url": "https://github.com/drid-uniben/django-backend",
+    "live_url": "",
+    "icon_name": "Layout",
+    "theme_config": {},
+    "is_published": true,
+    "order": 0,
+    "stack": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  }
+},
+{
+  "model": "portfolio.project",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "title": "Hospital Management System",
+    "slug": "hospital-system",
+    "summary": "Healthcare Backend",
+    "problem": "Healthcare workflows were fragmented, requiring structured role-based access and appointment tracking.",
+    "architecture": "Modular Django backend with role-based authentication and REST API endpoints designed for Flutter client integration.",
+    "key_focus": "Role-based access control · API architecture",
+    "has_api": true,
+    "github_url": "https://github.com/Oma05-01/hospital",
+    "live_url": "https://hospital-or65.onrender.com",
+    "icon_name": "Layout",
+    "theme_config": {},
+    "is_published": true,
+    "order": 0,
+    "stack": [
+      5,
+      6,
+      11,
+      12
+    ]
+  }
+},
+{
+  "model": "portfolio.project",
+  "pk": 4,
+  "fields": {
+    "category": 1,
+    "title": "Odyce Perfume Store",
+    "slug": "odyce-store",
+    "summary": "E-commerce Backend",
+    "problem": "Needed a scalable backend to handle authentication, product management, and order logic for a consumer perfume storefront.",
+    "architecture": "Structured Django models with clean separation of concerns across authentication, product cataloguing, and order management.",
+    "key_focus": "E-commerce logic · authentication flows",
+    "has_api": false,
+    "github_url": "https://github.com/Oma05-01/Odyce",
+    "live_url": "https://main-ie29.onrender.com/",
+    "icon_name": "Layout",
+    "theme_config": {},
+    "is_published": true,
+    "order": 0,
+    "stack": [
+      5,
+      6,
+      13,
+      14
+    ]
+  }
+},
+{
+  "model": "portfolio.project",
+  "pk": 5,
+  "fields": {
+    "category": 1,
+    "title": "QuestNest Infrastructure Engine",
+    "slug": "questnest",
+    "summary": "Operational Platform",
+    "problem": "Operational platforms often lack organisation-scoped identity control, lifecycle enforcement, and traceable automation across assets and payments.",
+    "architecture": "Infrastructure-first Django system centred on organisation ownership, lifecycle state validation, and event-driven automation with task generation.",
+    "key_focus": "Operational infrastructure · automation · event-driven architecture",
+    "has_api": false,
+    "github_url": "https://github.com/Oma05-01/QuestNest",
+    "live_url": "",
+    "icon_name": "Layout",
+    "theme_config": {},
+    "is_published": true,
+    "order": 0,
+    "stack": [
+      5,
+      6,
+      12,
+      15
+    ]
+  }
+}
+]
