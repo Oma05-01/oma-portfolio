@@ -39,7 +39,7 @@ class Project(models.Model):
     
     stack = models.ManyToManyField(Technology, related_name='projects', blank=True)
     
-    theme_config = models.JSONField(default=dict)
+    theme_config = models.JSONField(default=dict, blank=True, null=True)
     is_published = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
 

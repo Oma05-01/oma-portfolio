@@ -9,8 +9,8 @@ class ProjectMediaSerializer(serializers.ModelSerializer):
         model = ProjectMedia
         fields = ['title', 'description', 'image', 'isPdf']
 
+
 class ProjectSerializer(serializers.ModelSerializer):
-    # Flatten the many-to-many relationship into a simple array of strings
     stack = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     screenshots = ProjectMediaSerializer(source='media', many=True, read_only=True)
     theme = serializers.JSONField(source='theme_config')
@@ -29,6 +29,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'stack', 'theme', 'screenshots'
         ]
 
+
 class CategorySerializer(serializers.ModelSerializer):
     projects = serializers.SerializerMethodField()
 
@@ -39,4 +40,5 @@ class CategorySerializer(serializers.ModelSerializer):
     def get_projects(self, obj):
         # Only return published projects
         published_projects = obj.projects.filter(is_published=True)
-        return ProjectSerializer(published_projects, many=True).data
+        # Passed context=self.context to ensure absolute media URLs are generated
+        return ProjectSerializer(published_projects, many=True, context=self.context).data

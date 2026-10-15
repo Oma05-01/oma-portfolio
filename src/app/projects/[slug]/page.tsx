@@ -1,10 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, notFound } from "next/navigation";
-import { projects } from "@/data/projects";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+interface Screenshot {
+  title: string;
+  description: string;
+  image: string; // Cloudinary / Django media URL
+  isPdf?: boolean;
+}
+
+interface ProjectData {
+  title: string;
+  slug: string;
+  summary?: string;
+  problem: string;
+  architecture?: string;
+  keyFocus?: string;
+  stack?: string[];
+  github?: string | null;
+  liveUrl?: string | null;
+  hasApi?: boolean;
+  screenshots?: Screenshot[];
+}
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -22,14 +44,42 @@ const fadeInView = (delay = 0) => ({
 export default function ProjectPage() {
   const params = useParams();
   const slug = params.slug as string;
+  
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [project, setProject] = useState<ProjectData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const project = projects[slug];
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        const res = await fetch(`${API_URL}/api/projects/${slug}/`);
+        if (res.ok) {
+          const data = await res.json();
+          setProject(data);
+        }
+      } catch (error) {
+        console.warn("Could not fetch project from API, using static fallback if available.", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProject();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <main style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <p className="label">Loading project details...</p>
+      </main>
+    );
+  }
+
   if (!project) return notFound();
 
   const hasContent = project.problem && project.architecture;
 
-  // ── FALLBACK ──────────────────────────────────────────
+  // ── FALLBACK VIEW IF NO DETAILED CASE STUDY ──────────
   if (!hasContent) {
     return (
       <main
@@ -66,35 +116,37 @@ export default function ProjectPage() {
         >
           No detailed case study yet. View the source code directly.
         </p>
-        <a
-          href={project.github}
-          target="_blank"
-          rel="noreferrer"
-          style={{
-            fontSize: "0.68rem",
-            fontWeight: 500,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            padding: "12px 28px",
-            border: "1px solid var(--accent-line)",
-            borderRadius: "2px",
-            color: "var(--accent)",
-            transition: "background 0.2s ease",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "var(--accent-dim)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "transparent")
-          }
-        >
-          View on GitHub ↗
-        </a>
+        {project.github && (
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              fontSize: "0.68rem",
+              fontWeight: 500,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              padding: "12px 28px",
+              border: "1px solid var(--accent-line)",
+              borderRadius: "2px",
+              color: "var(--accent)",
+              transition: "background 0.2s ease",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = "var(--accent-dim)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
+          >
+            View on GitHub ↗
+          </a>
+        )}
       </main>
     );
   }
 
-  // ── FULL PAGE ─────────────────────────────────────────
+  // ── FULL CASE STUDY PAGE ─────────────────────────────
   return (
     <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
 
@@ -129,7 +181,7 @@ export default function ProjectPage() {
         </Link>
       </div>
 
-      {/* Hero */}
+      {/* Hero Header */}
       <motion.header
         {...fade(0)}
         style={{
@@ -254,7 +306,7 @@ export default function ProjectPage() {
         </div>
       </motion.header>
 
-      {/* Body */}
+      {/* Main Body */}
       <div
         style={{
           maxWidth: "1100px",
@@ -266,7 +318,7 @@ export default function ProjectPage() {
           alignItems: "start",
         }}
       >
-        {/* Left — content */}
+        {/* Left column — main narrative */}
         <div style={{ display: "flex", flexDirection: "column", gap: "4rem" }}>
 
           {/* Problem */}
@@ -304,21 +356,23 @@ export default function ProjectPage() {
           </motion.section>
 
           {/* Key Focus */}
-          <motion.section {...fadeInView(0.15)}>
-            <p className="label" style={{ marginBottom: "0.8rem" }}>Key Focus</p>
-            <span className="accent-rule" style={{ marginBottom: "1.5rem", display: "block" }} />
-            <p style={{ fontSize: "0.95rem", lineHeight: 1.8, color: "var(--fg-mid)" }}>
-              {project.keyFocus}
-            </p>
-          </motion.section>
+          {project.keyFocus && (
+            <motion.section {...fadeInView(0.15)}>
+              <p className="label" style={{ marginBottom: "0.8rem" }}>Key Focus</p>
+              <span className="accent-rule" style={{ marginBottom: "1.5rem", display: "block" }} />
+              <p style={{ fontSize: "0.95rem", lineHeight: 1.8, color: "var(--fg-mid)" }}>
+                {project.keyFocus}
+              </p>
+            </motion.section>
+          )}
 
-          {/* Screenshots */}
+          {/* Screenshots & PDF Attachments */}
           {project.screenshots && project.screenshots.length > 0 && (
             <motion.section {...fadeInView(0.2)}>
               <p className="label" style={{ marginBottom: "0.8rem" }}>Implementation</p>
               <span className="accent-rule" style={{ marginBottom: "1.5rem", display: "block" }} />
               <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                {project.screenshots.map((snap: any, idx: number) => (
+                {project.screenshots.map((snap: Screenshot, idx: number) => (
                   <div
                     key={idx}
                     style={{
@@ -360,6 +414,7 @@ export default function ProjectPage() {
                         </a>
                       </div>
                     ) : (
+                      /* Standard Image element supporting both Cloudinary and local assets */
                       <img
                         src={snap.image}
                         alt={snap.title}
@@ -406,12 +461,12 @@ export default function ProjectPage() {
           )}
         </div>
 
-        {/* Right — sidebar */}
+        {/* Right column — sidebar details */}
         <motion.aside
           {...fade(0.3)}
           style={{ position: "sticky", top: "2rem" }}
         >
-          {/* Tech stack */}
+          {/* Tech stack box */}
           <div
             style={{
               background: "var(--surface)",
@@ -442,7 +497,7 @@ export default function ProjectPage() {
             </div>
           </div>
 
-          {/* Project meta */}
+          {/* Project metadata table */}
           <div
             style={{
               background: "var(--surface)",
@@ -453,8 +508,8 @@ export default function ProjectPage() {
           >
             <p className="label" style={{ marginBottom: "1rem" }}>Details</p>
             {[
-              { key: "Type",       value: "Backend System"   },
-              { key: "Role",       value: "Lead Developer"   },
+              { key: "Type",       value: "Backend System" },
+              { key: "Role",       value: "Lead Developer" },
               { key: "Repository", value: "github.com ↗", href: project.github },
             ].map((row, i, arr) => (
               <div
@@ -503,7 +558,7 @@ export default function ProjectPage() {
         </motion.aside>
       </div>
 
-      {/* Image lightbox */}
+      {/* Image Lightbox Modal */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div

@@ -12,7 +12,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-fallback-key-change-this')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
+DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
 
 # Host configurations
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '.onrender.com,.railway.app,localhost,127.0.0.1').split(',')

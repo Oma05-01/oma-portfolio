@@ -3,12 +3,20 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { getProjectIcon } from "@/data/projects";
 
-// 1. Define the types coming from your Django API
+// 1. Updated API Types to match Django DRF Serializer
+export interface ApiScreenshot {
+  title: string;
+  description: string;
+  image: string; // Absolute URL from Django/Cloudinary
+  isPdf?: boolean;
+}
+
 export interface ApiProject {
   title: string;
   slug: string;
-  summary: string; // We'll use this for your 'subtitle' (e.g., "2026 Finance Act")
+  summary: string;
   problem: string;
   architecture: string;
   keyFocus: string;
@@ -16,6 +24,8 @@ export interface ApiProject {
   github: string | null;
   liveUrl: string | null;
   hasApi: boolean;
+  icon?: string; // Icon name string from Django (e.g. "BookOpen")
+  screenshots?: ApiScreenshot[];
 }
 
 export interface ApiCategory {
@@ -25,12 +35,9 @@ export interface ApiCategory {
   projects: ApiProject[];
 }
 
-// 2. Accept categories as a prop
 export default function Projects({ categories }: { categories: ApiCategory[] }) {
-  // 3. Track the active tab (defaulting to the first category if it exists)
   const [activeCategorySlug, setActiveCategorySlug] = useState(categories[0]?.slug || "");
 
-  // Get the projects for the currently selected category
   const activeCategory = categories.find((c) => c.slug === activeCategorySlug);
   const activeProjects = activeCategory?.projects || [];
 
@@ -51,7 +58,7 @@ export default function Projects({ categories }: { categories: ApiCategory[] }) 
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           viewport={{ once: true }}
-          style={{ marginBottom: "2rem" }} // Reduced margin slightly to fit tabs
+          style={{ marginBottom: "2rem" }}
         >
           <p className="label" style={{ marginBottom: "0.8rem" }}>
             Selected Work
@@ -59,7 +66,7 @@ export default function Projects({ categories }: { categories: ApiCategory[] }) 
           <h2 className="section-heading">Projects</h2>
         </motion.div>
 
-        {/* 4. Dynamic Tabs UI (Matches your minimalist aesthetic) */}
+        {/* Category Tabs */}
         {categories.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -90,16 +97,6 @@ export default function Projects({ categories }: { categories: ApiCategory[] }) 
                   fontWeight: activeCategorySlug === category.slug ? 500 : 400,
                   transition: "color 0.2s ease",
                 }}
-                onMouseEnter={(e) => {
-                  if (activeCategorySlug !== category.slug) {
-                    e.currentTarget.style.color = "var(--fg-mid)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (activeCategorySlug !== category.slug) {
-                    e.currentTarget.style.color = "var(--fg-muted)";
-                  }
-                }}
               >
                 {category.name}
               </button>
@@ -107,206 +104,197 @@ export default function Projects({ categories }: { categories: ApiCategory[] }) 
           </motion.div>
         )}
 
-        {/* Project list */}
+        {/* Project List */}
         <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
-          {/* AnimatePresence allows the list to smoothly transition when switching tabs */}
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeCategorySlug} // Re-animates when the active category changes
+              key={activeCategorySlug}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
               style={{ display: "flex", flexDirection: "column", gap: "0" }}
             >
-              {activeProjects.map((project, index) => (
-                <motion.div
-                  key={project.slug}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.07, ease: [0.4, 0, 0.2, 1] }}
-                  viewport={{ once: true }}
-                  style={{
-                    borderTop: "1px solid var(--border)",
-                    padding: "2rem 0",
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1.8fr auto",
-                    gap: "2.5rem",
-                    alignItems: "start",
-                    transition: "background 0.2s ease",
-                    cursor: "default",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "var(--surface)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                >
-                  {/* Left — title */}
-                  <div style={{ paddingRight: "1rem" }}>
-                    <p
-                      style={{
-                        fontSize: "0.58rem",
-                        letterSpacing: "0.2em",
-                        textTransform: "uppercase",
-                        color: "var(--accent)",
-                        fontWeight: 500,
-                        marginBottom: "0.4rem",
-                      }}
-                    >
-                      {project.summary} {/* Mapped API 'summary' to your 'subtitle' */}
-                    </p>
-                    <h3
-                      style={{
-                        fontSize: "1.05rem",
-                        fontWeight: 400,
-                        color: "var(--fg)",
-                        lineHeight: 1.3,
-                        marginBottom: "0.8rem",
-                      }}
-                    >
-                      {project.title}
-                    </h3>
-                    {/* Stack tags */}
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                      {project.stack.map((tech) => (
-                        <span
-                          key={tech}
-                          style={{
-                            fontSize: "0.58rem",
-                            letterSpacing: "0.08em",
-                            color: "var(--fg-muted)",
-                            padding: "3px 8px",
-                            border: "1px solid var(--border)",
-                            borderRadius: "2px",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+              {activeProjects.map((project, index) => {
+                // Resolves string icon name like "BookOpen" to Lucide component
+                const IconComponent = getProjectIcon(project.icon);
 
-                  {/* Middle — description */}
-                  <div>
-                    <p
-                      style={{
-                        fontSize: "0.82rem",
-                        lineHeight: 1.75,
-                        color: "var(--fg-mid)",
-                        marginBottom: "0.5rem",
-                      }}
-                    >
-                      {project.problem}
-                    </p>
-                    <p
-                      style={{
-                        fontSize: "0.75rem",
-                        lineHeight: 1.7,
-                        color: "var(--fg-muted)",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      {project.keyFocus}
-                    </p>
-                  </div>
-
-                  {/* Right — links */}
-                  <div
+                return (
+                  <motion.div
+                    key={project.slug}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.07, ease: [0.4, 0, 0.2, 1] }}
+                    viewport={{ once: true }}
                     style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                      alignItems: "flex-end",
-                      flexShrink: 0,
+                      borderTop: "1px solid var(--border)",
+                      padding: "2rem 0",
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1.8fr auto",
+                      gap: "2.5rem",
+                      alignItems: "start",
+                      transition: "background 0.2s ease",
+                      cursor: "default",
                     }}
                   >
-                    <Link
-                      href={`/projects/${project.slug}`}
+                    {/* Left — title & icon */}
+                    <div style={{ paddingRight: "1rem" }}>
+                      <p
+                        style={{
+                          fontSize: "0.58rem",
+                          letterSpacing: "0.2em",
+                          textTransform: "uppercase",
+                          color: "var(--accent)",
+                          fontWeight: 500,
+                          marginBottom: "0.4rem",
+                        }}
+                      >
+                        {project.summary}
+                      </p>
+                      <h3
+                        style={{
+                          fontSize: "1.05rem",
+                          fontWeight: 400,
+                          color: "var(--fg)",
+                          lineHeight: 1.3,
+                          marginBottom: "0.8rem",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
+                        <IconComponent style={{ width: "18px", height: "18px" }} />
+                        {project.title}
+                      </h3>
+                      {/* Stack tags */}
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                        {project.stack?.map((tech) => (
+                          <span
+                            key={tech}
+                            style={{
+                              fontSize: "0.58rem",
+                              letterSpacing: "0.08em",
+                              color: "var(--fg-muted)",
+                              padding: "3px 8px",
+                              border: "1px solid var(--border)",
+                              borderRadius: "2px",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Middle — description */}
+                    <div>
+                      <p
+                        style={{
+                          fontSize: "0.82rem",
+                          lineHeight: 1.75,
+                          color: "var(--fg-mid)",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        {project.problem}
+                      </p>
+                      <p
+                        style={{
+                          fontSize: "0.75rem",
+                          lineHeight: 1.7,
+                          color: "var(--fg-muted)",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        {project.keyFocus}
+                      </p>
+                    </div>
+
+                    {/* Right — links */}
+                    <div
                       style={{
-                        fontSize: "0.65rem",
-                        fontWeight: 500,
-                        letterSpacing: "0.15em",
-                        textTransform: "uppercase",
-                        color: "var(--accent)",
-                        padding: "7px 14px",
-                        border: "1px solid var(--accent-line)",
-                        borderRadius: "2px",
-                        whiteSpace: "nowrap",
-                        transition: "background 0.2s ease, border-color 0.2s ease",
-                        display: "inline-block",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "var(--accent-dim)";
-                        e.currentTarget.style.borderColor = "var(--accent)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "transparent";
-                        e.currentTarget.style.borderColor = "var(--accent-line)";
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "8px",
+                        alignItems: "flex-end",
+                        flexShrink: 0,
                       }}
                     >
-                      Case Study ↗
-                    </Link>
+                      <Link
+                        href={`/projects/${project.slug}`}
+                        style={{
+                          fontSize: "0.65rem",
+                          fontWeight: 500,
+                          letterSpacing: "0.15em",
+                          textTransform: "uppercase",
+                          color: "var(--accent)",
+                          padding: "7px 14px",
+                          border: "1px solid var(--accent-line)",
+                          borderRadius: "2px",
+                          whiteSpace: "nowrap",
+                          transition: "background 0.2s ease, border-color 0.2s ease",
+                          display: "inline-block",
+                        }}
+                      >
+                        Case Study ↗
+                      </Link>
 
-                    <div style={{ display: "flex", gap: "10px" }}>
-                      {project.github && (
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noreferrer"
-                          style={{
-                            fontSize: "0.62rem",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--fg-muted)",
-                            transition: "color 0.2s ease",
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--fg)")}
-                          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}
-                        >
-                          Code
-                        </a>
-                      )}
-                      {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          style={{
-                            fontSize: "0.62rem",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--fg-muted)",
-                            transition: "color 0.2s ease",
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--fg)")}
-                          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}
-                        >
-                          Live
-                        </a>
-                      )}
-                      {project.hasApi && (
-                        <Link
-                          href={`/api-docs/${project.slug}`}
-                          style={{
-                            fontSize: "0.62rem",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--fg-muted)",
-                            transition: "color 0.2s ease",
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--fg)")}
-                          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}
-                        >
-                          API
-                        </Link>
-                      )}
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        {project.github && (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              fontSize: "0.62rem",
+                              letterSpacing: "0.1em",
+                              textTransform: "uppercase",
+                              color: "var(--fg-muted)",
+                              transition: "color 0.2s ease",
+                            }}
+                          >
+                            Code
+                          </a>
+                        )}
+                        {project.liveUrl && (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              fontSize: "0.62rem",
+                              letterSpacing: "0.1em",
+                              textTransform: "uppercase",
+                              color: "var(--fg-muted)",
+                              transition: "color 0.2s ease",
+                            }}
+                          >
+                            Live
+                          </a>
+                        )}
+                        {project.hasApi && (
+                          <Link
+                            href={`/api-docs/${project.slug}`}
+                            style={{
+                              fontSize: "0.62rem",
+                              letterSpacing: "0.1em",
+                              textTransform: "uppercase",
+                              color: "var(--fg-muted)",
+                              transition: "color 0.2s ease",
+                            }}
+                          >
+                            API
+                          </Link>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </AnimatePresence>
 
-          {/* Bottom border */}
           <div style={{ borderTop: "1px solid var(--border)" }} />
         </div>
       </div>

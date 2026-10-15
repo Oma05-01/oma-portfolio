@@ -1,6 +1,41 @@
-import { BookOpen, LucideIcon } from "lucide-react";
-import { Hospital, ShoppingBag, School, Building2, Calculator } from "lucide-react";
-import { Ledger } from "next/font/google";
+import { 
+  BookOpen, 
+  Hospital, 
+  ShoppingBag, 
+  School, 
+  Building2, 
+  Calculator, 
+  Code,
+  LucideIcon 
+} from "lucide-react";
+
+// Map string keys stored in Django DB (icon_name) to Lucide Icon components
+export const iconMap: Record<string, LucideIcon> = {
+  BookOpen,
+  Hospital,
+  ShoppingBag,
+  School,
+  Building2,
+  Calculator,
+};
+
+// Fallback icon when a string from the API doesn't match the map
+export const DEFAULT_ICON = Code;
+
+export interface Screenshot {
+  title: string;
+  description: string;
+  image: string; // Full URL from Django REST Framework / Cloudinary
+  isPdf?: boolean;
+}
+
+export interface ProjectTheme {
+  primary: string;    // e.g. "text-indigo-400"
+  background: string; // e.g. "bg-slate-900"
+  accent: string;     // e.g. "hover:text-indigo-300"
+  font: "inter" | "space" | "playfair" | "jetbrains" | "roboto" | "montserrat";
+}
+
 export interface Project {
   title: string;
   slug: string;
@@ -12,212 +47,15 @@ export interface Project {
   stack?: string[];
   github?: string;
   liveUrl?: string;
-  icon: LucideIcon;
-  // 👇 Theme configuration
-  theme: {
-    primary: string;     // main accent color
-    background: string;  // page background
-    accent: string;  
-    font: "inter" | "space" | "playfair" | "jetbrains" | "roboto" | "montserrat";   // hover/glow color
-  };
-  screenshots?: {
-    title: string;
-    description: string;
-    image: string;
-    isPdf?: boolean;
-  }[];
+  icon?: LucideIcon | string; // Supports both Lucide components & raw API strings
+  theme: ProjectTheme;
+  screenshots?: Screenshot[];
 }
 
-export const projects: Record<string, Project> = {
-  "lms-platform": {
-  title: "Modular LMS & Enrollment Engine",
-  slug: "lms-platform",
-  summary: "A role-based learning management system with dynamic enrollment, payments, and content access control.",
-  problem:
-    "Learning platforms often struggle with enforcing structured access control across courses, packages, payments, and timed enrollments.",
-  architecture:
-    "Designed a modular backend architecture linking courses, packages, payments, enrollments, and content state logic. Implemented access control layers, quiz submission workflows, resource analytics, and real-time student progress tracking.",
-  keyFocus: "Enrollment Lifecycle & Access State Engine",
-  stack: ["Python", "Django", "Django REST Framework", "JWT", "Celery", "Channels"],
-  github: "https://github.com/drid-uniben/django-backend",
-  icon: BookOpen,
-  theme: {
-    primary: "text-indigo-400",
-    background: "bg-slate-900",
-    accent: "hover:text-indigo-300",
-    font: "montserrat"
-  },
-},
- "hospital-system": {
-  title: "Hospital Management System",
-  slug: "hospital-system",
-  summary: "Role-based healthcare management platform.",
-  problem: "A structured healthcare platform with role-based access control and API-first architecture.",
-  architecture: "Modular Django backend with DRF endpoints and relational data modeling.",
-  keyFocus: "Scalability, structured logic, and clean API separation.",
-  stack: ["Django", "Django REST Framework", "PostgreSQL"],
-  github: "https://github.com/Oma05-01/hospital",
-  icon: Hospital,
-  theme: {
-    primary: "text-purple-400",
-    background: "bg-slate-950",
-    accent: "hover:text-purple-300",
-    font: "space"
-  },
-  // update with actual screenshots and descriptions relevant to the odyce project
-  screenshots: [
-    {
-      title: "Database Architecture",
-      description: "Snippet showing the structured relational database models for patients and appointments.",
-      image: "/docs/hospital-database-schema.pdf", // Path to your PDF in public/docs
-      isPdf: true, 
-    },
-    {
-      title: "High-Level System Architecture",
-      description: "Architecture diagram illustrating the Flutter mobile client integration, synchronous RBAC API flow, and asynchronous background task delegation.",
-      image: "/hospital-arch.png",// Save your Eraser export as this
-      isPdf: false,
-    },
-    {
-      title: "Authentication API via Postman",
-      description: "Testing the JWT token generation and role-based access validation for doctors and admins.",
-      image: "/postman-test.png" // Place an image named this in your 'public' folder
-    },
-  ],
-},
-  "odyce-store": {
-    title: "Odyce Perfume Store",
-    slug: "odyce-store",
-    summary: "E-commerce platform for selling perfumes.",
-    problem:
-      "An e-commerce backend with authentication flows and clean separation of concerns.",
-    architecture:"Structured Django models with authentication and order management logic.",
-    keyFocus: "E-commerce logic and authentication flows.",
-    stack: ["Django", "Python", "HTML", "CSS"],
-      github: "https://github.com/Oma05-01/Odyce",
-      icon: ShoppingBag,
-    theme: {
-      primary: "text-blue-400",
-      background: "bg-black",
-      accent: "hover:text-blue-300",
-      font: "playfair"
-    },
-    screenshots: [
-    {
-      title: "Database Architecture",
-      description: "Snippet showing the structured relational database models for patients and appointments.",
-      image: "/docs/hospital-database-schema.pdf", // Path to your PDF in public/docs
-      isPdf: false, 
-    },
-    {
-      title: "High-Level System Architecture",
-      description: "Architecture diagram illustrating the Flutter mobile client integration, synchronous RBAC API flow, and asynchronous background task delegation.",
-      image: "/hospital-arch.png",
-      isPdf: false,
-    },
-    {
-      title: "Authentication API via Postman",
-      description: "Testing the JWT token generation and role-based access validation for doctors and admins.",
-      image: "/postman-test.png"
-    },
-  ],
-  },
-  "drid-platform": {
-    title: "DRID Student Platform",
-    slug: "drid-platform",
-    summary: "Institutional digital system improvements.",
-    problem:
-      "Institutional digital systems required backend flow improvements and logic restructuring.",
-    architecture:
-      "Contributed backend logic fixes and improved system reliability during peak usage.",
-    keyFocus: "Backend Logic Optimization",
-    stack: ["Python", "Django"],
-    github: "https://drid.uniben.edu/",
-    icon: School,
-    theme: {
-      primary: "text-emerald-400",
-      background: "bg-slate-900",
-      accent: "hover:text-emerald-300",
-      font: "jetbrains"
-    },
-  },
-  "questnest": {
-    title: "QuestNest Multi-Tenant Platform",
-    slug: "questnest",
-    summary: "A context-aware PropTech platform enabling seamless switching between personal tenant hubs and corporate management portfolios.",
-    problem: "Traditional PropTech forces users into rigid 'Landlord' or 'Tenant' silos at signup, fragmenting identity management and cross-portfolio asset handling.",
-    architecture: "Asynchronous Django 6.0 backend with a custom Workspace/Membership ORM, unified JWT auth, and a React 18 context-driven frontend.",
-    keyFocus: "Multi-tenant data isolation, dynamic session contexts, unified authentication, and granular RBAC.",
-    stack: ["Django 6.0", "React 18", "PostgreSQL", "ASGI / Daphne", "Tailwind v4"],
-    github: "https://github.com/Oma05-01/QuestNest",
-    icon: Building2, 
-    theme: {
-      primary: "text-blue-400", // Updated to reflect the 'quest-blue' used in your Tailwind config
-      background: "bg-slate-950",
-      accent: "hover:text-blue-300",
-      font: "roboto"
-    },
-    screenshots: [
-      {
-        title: "Multi-Tenant Data Model",
-        description: "Entity-Relationship Diagram detailing the Workspace and Membership schemas that drive the platform's role-based data isolation.",
-        image: "/docs/questnest-schema.pdf", 
-        isPdf: true, 
-      },
-      {
-        title: "Unified Authentication Engine",
-        description: "The API-driven login and onboarding flow that dynamically routes users to either a personal hub or a business portfolio configuration.",
-        image: "/questnest-auth-flow.png", 
-        isPdf: false,
-      },
-      {
-        title: "Context-Aware Dashboard",
-        description: "The React frontend utilizing WorkspaceContext to seamlessly re-skin layouts and datasets based on the active user role and environment.",
-        image: "/questnest-dashboard-switch.png" 
-      },
-    ],
-  },
-"tax-estimator" :{
-  title: "Tax Estimation Engine",
-  slug: "tax-estimator",
-  hasApi: false, // Pure client-side WASM magic!
-  problem: "Users needed a secure way to calculate complex multi-profile tax liabilities (Salaried, Freelancer, Hybrid) and process sensitive bank statements without the privacy risks of server-side data retention.",
-  architecture: "Leveraged Pyodide (WebAssembly) to execute Python data processing entirely within the browser. Engineered context-aware React UI flows and a proportional tax distribution algorithm to accurately handle progressive fiscal brackets.",
-  keyFocus: "WebAssembly (WASM) Integration & Secure Client-Side Processing",
-  stack: ["React", "TypeScript", "Tailwind CSS", "WebAssembly", "Pyodide"],
-  icon: Calculator,
-  github: "https://github.com/Oma05-01/Tax_Esteem",
-  theme: {
-    primary: "text-blue-500",
-    background: "bg-slate-900",
-    accent: "hover:text-blue-400",
-    font: "inter"
-  },
-  screenshots: [
-    {
-      title: "Tax Calculation Dashboard",
-      description: "Interactive dashboard featuring granular transaction filtering, state-locked progress steppers, and dynamic taxability toggles.",
-      image: "/images/tax-dashboard.png",
-      isPdf: false,
-    },
-    {
-      title: "PDF Report Generation",
-      description: "Automated reporting system that transforms progressive bracket data into a downloadable, print-ready receipt format.",
-      image: "/images/tax-report.png",
-      isPdf: false,
-    },
-    {
-      title: "Tax Breakdown Visualization",
-      description: "Dynamic visual breakdown of tax liabilities across different profiles and brackets, showcasing the proportional distribution algorithm in action.",
-      image: "/images/tax_es_breakd.png",
-      isPdf: false,
-    },
-    {
-      title: "Summary Report Generation",
-      description: "Comprehensive summary report that aggregates tax liabilities, reliefs, and final payable amounts into a single section for user reference.",
-      image: "/images/break_d.png",
-      isPdf: false,
-    }
-  ]
-  },
-};
+// Helper to resolve an icon string name or component safely
+export function getProjectIcon(iconNameOrComponent: LucideIcon | string | undefined): LucideIcon {
+  if (typeof iconNameOrComponent === "string") {
+    return iconMap[iconNameOrComponent] || DEFAULT_ICON;
+  }
+  return iconNameOrComponent || DEFAULT_ICON;
+}
