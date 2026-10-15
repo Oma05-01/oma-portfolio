@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -72,13 +73,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "http://localhost:5173",  # Common for Vite React
+    "http://localhost:5173",
 ]
 
 # Add Vercel domain from environment variable if available
 FRONTEND_URL = os.getenv('FRONTEND_URL')
 if FRONTEND_URL:
-    CORS_ALLOWED_ORIGINS.append(FRONTEND_URL)
+    # .rstrip('/') removes trailing slashes that cause corsheaders.E014
+    cleaned_url = FRONTEND_URL.rstrip('/')
+    CORS_ALLOWED_ORIGINS.append(cleaned_url)
+
+# Required for Django Admin POST requests on HTTPS live hosts (fixes 500 error)
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",
+]
+if FRONTEND_URL:
+    CSRF_TRUSTED_ORIGINS.append(FRONTEND_URL.rstrip('/'))
 
 
 # Database
@@ -136,7 +146,7 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 MEDIA_URL = '/media/'
