@@ -11,6 +11,7 @@ export default function ProfileSnippet() {
       }}
     >
       <div
+        className="profile-card"
         style={{
           display: "flex",
           flexDirection: "row",
@@ -35,14 +36,15 @@ export default function ProfileSnippet() {
             "var(--surface)";
         }}
       >
-        {/* Photo */}
+        {/* Photo — 128px x 128px */}
         <div
+          className="profile-photo"
           style={{
             position: "relative",
-            width: "96px",
-            height: "96px",
+            width: "128px",
+            height: "128px",
             flexShrink: 0,
-            borderRadius: "3px",
+            borderRadius: "4px",
             overflow: "hidden",
             border: "1px solid var(--border)",
           }}
@@ -51,6 +53,8 @@ export default function ProfileSnippet() {
             src="/profilep_30.jpeg"
             alt="Philip Esigbone"
             fill
+            sizes="128px"
+            priority
             style={{ objectFit: "cover" }}
           />
         </div>
@@ -87,8 +91,9 @@ export default function ProfileSnippet() {
           </p>
         </div>
 
-        {/* Availability */}
+        {/* Availability Badge */}
         <div
+          className="profile-availability"
           style={{
             display: "flex",
             alignItems: "center",
@@ -135,6 +140,18 @@ export default function ProfileSnippet() {
       <style>{`
         @keyframes ping {
           75%, 100% { transform: scale(2); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+          .profile-card {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 1.5rem !important;
+            padding: 1.5rem !important;
+          }
+          .profile-availability {
+            align-self: flex-start !important;
+          }
         }
       `}</style>
     </section>

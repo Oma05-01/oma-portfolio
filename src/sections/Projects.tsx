@@ -240,7 +240,7 @@ export default function Projects({ categories }: { categories: ApiCategory[] }) 
                         Case Study ↗
                       </Link>
 
-                      <div style={{ display: "flex", gap: "10px" }}>
+                      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "flex-end" }}>
                         {project.github && (
                           <a
                             href={project.github}
@@ -248,10 +248,26 @@ export default function Projects({ categories }: { categories: ApiCategory[] }) 
                             rel="noreferrer"
                             style={{
                               fontSize: "0.62rem",
-                              letterSpacing: "0.1em",
+                              letterSpacing: "0.12em",
                               textTransform: "uppercase",
-                              color: "var(--fg-muted)",
-                              transition: "color 0.2s ease",
+                              color: "var(--fg-mid)",
+                              padding: "5px 11px",
+                              border: "1px solid var(--border)",
+                              borderRadius: "2px",
+                              background: "var(--surface)",
+                              transition: "all 0.2s ease",
+                              display: "inline-flex",
+                              alignItems: "center",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = "var(--fg)";
+                              e.currentTarget.style.borderColor = "var(--border-hover)";
+                              e.currentTarget.style.background = "var(--bg)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = "var(--fg-mid)";
+                              e.currentTarget.style.borderColor = "var(--border)";
+                              e.currentTarget.style.background = "var(--surface)";
                             }}
                           >
                             Code
@@ -264,10 +280,26 @@ export default function Projects({ categories }: { categories: ApiCategory[] }) 
                             rel="noreferrer"
                             style={{
                               fontSize: "0.62rem",
-                              letterSpacing: "0.1em",
+                              letterSpacing: "0.12em",
                               textTransform: "uppercase",
-                              color: "var(--fg-muted)",
-                              transition: "color 0.2s ease",
+                              color: "var(--fg-mid)",
+                              padding: "5px 11px",
+                              border: "1px solid var(--border)",
+                              borderRadius: "2px",
+                              background: "var(--surface)",
+                              transition: "all 0.2s ease",
+                              display: "inline-flex",
+                              alignItems: "center",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = "var(--fg)";
+                              e.currentTarget.style.borderColor = "var(--border-hover)";
+                              e.currentTarget.style.background = "var(--bg)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = "var(--fg-mid)";
+                              e.currentTarget.style.borderColor = "var(--border)";
+                              e.currentTarget.style.background = "var(--surface)";
                             }}
                           >
                             Live
@@ -278,10 +310,26 @@ export default function Projects({ categories }: { categories: ApiCategory[] }) 
                             href={`/api-docs/${project.slug}`}
                             style={{
                               fontSize: "0.62rem",
-                              letterSpacing: "0.1em",
+                              letterSpacing: "0.12em",
                               textTransform: "uppercase",
-                              color: "var(--fg-muted)",
-                              transition: "color 0.2s ease",
+                              color: "var(--fg-mid)",
+                              padding: "5px 11px",
+                              border: "1px solid var(--border)",
+                              borderRadius: "2px",
+                              background: "var(--surface)",
+                              transition: "all 0.2s ease",
+                              display: "inline-flex",
+                              alignItems: "center",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = "var(--fg)";
+                              e.currentTarget.style.borderColor = "var(--border-hover)";
+                              e.currentTarget.style.background = "var(--bg)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = "var(--fg-mid)";
+                              e.currentTarget.style.borderColor = "var(--border)";
+                              e.currentTarget.style.background = "var(--surface)";
                             }}
                           >
                             API

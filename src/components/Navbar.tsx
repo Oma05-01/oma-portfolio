@@ -20,7 +20,7 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -72, opacity: 0 }}
+      initial={{ y: -90, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
       style={{
@@ -41,10 +41,11 @@ export default function Navbar() {
           maxWidth: "1100px",
           margin: "0 auto",
           padding: "0 1.5rem",
-          height: "64px",
+          height: scrolled ? "72px" : "88px", // Generous 88px allowance at top, contracts to 72px on scroll
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          transition: "height 0.3s ease", // Smooth height transition when scrolling
         }}
       >
         {/* Wordmark */}
@@ -96,7 +97,7 @@ export default function Navbar() {
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               color: "var(--accent)",
-              padding: "6px 14px",
+              padding: "7px 16px", // Slightly increased padding to match taller nav context
               border: "1px solid var(--accent-line)",
               borderRadius: "2px",
               transition: "background 0.2s ease, border-color 0.2s ease",
